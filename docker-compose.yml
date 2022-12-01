@@ -32,3 +32,23 @@ services:
       - utils
     volumes:
       - ./:/app/:z
+
+  tests-etf:
+    build:
+      context: .
+      dockerfile: ./docker/tests/Dockerfile
+    image: tests_etf
+    env_file:
+      - ./envs/tests
+    profiles:
+      - testing
+    depends_on:
+      - etf-test-db
+
+  etf-test-db:
+    image: postgres:13
+    container_name: ellandi_test_postgres
+    env_file:
+      - ./envs/tests
+    expose:
+      - "5432"
