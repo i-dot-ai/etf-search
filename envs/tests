@@ -1,0 +1,11 @@
+DJANGO_SETTINGS_MODULE=etf.settings
+PORT=8010
+DEBUG=True
+DJANGO_SECRET_KEY='1n53cur3K3y'
+POSTGRES_HOST=etf-test-db
+POSTGRES_PORT=5432
+POSTGRES_DB=etf
+POSTGRES_USER=etf
+POSTGRES_PASSWORD=insecure
+PGPASSWORD=insecure
+DATABASE_URL="postgres://etf:insecure@etf-test-db:5432/etf"
