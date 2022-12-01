@@ -4,5 +4,7 @@ flake8-print
 flake8-blind-except
 pep8-naming
 black
+nose
+httpx
 
 -r ./requirements.lock
