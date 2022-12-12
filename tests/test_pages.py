@@ -19,6 +19,4 @@ def with_client(func):
 @with_client
 def test_add_evaluation(client):
     response = client.get("/")
-    print(response)
-    print(response.text)
     assert response.status_code == 200
