@@ -20,6 +20,7 @@ ALLOWED_HOSTS = [
     "etf-sandbox.london.cloudapps.digital",
     "localhost",
     "127.0.0.1",
+    "etf-testserver",
 ]
 
 

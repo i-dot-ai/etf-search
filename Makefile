@@ -16,8 +16,6 @@ reset-db:
 	docker-compose run ${POSTGRES_HOST} createdb -U ${POSTGRES_USER} -h ${POSTGRES_HOST} ${POSTGRES_DB}
 	docker-compose kill
 
-# -------------------------------------- Code Style  -------------------------------------
-
 .PHONY: check-python-code
 check-python-code:
 	isort --check .
@@ -29,3 +27,9 @@ check-migrations:
 	docker-compose build web
 	docker-compose run web python manage.py migrate
 	docker-compose run web python manage.py makemigrations --check
+
+.PHONY: tests
+tests:
+	docker-compose down
+	docker-compose build tests-etf etf-test-db && docker-compose run --rm tests-etf || docker-compose down
+	docker-compose down
