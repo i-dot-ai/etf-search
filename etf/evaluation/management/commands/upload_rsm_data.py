@@ -41,17 +41,46 @@ def save_url_to_data_dir(url):
 def get_sheet_headers(filename):
     with open(filename, 'r') as file:
         reader = csv.reader(file)
-        header = next(reader)
-    return header
+        headers = next(reader)
+    return headers
 
-def get_evaluation_ids():
 
-def get_evaluation_rows_for_id():
+def get_evaluation_ids(data, headers):
+    unique_ids = set()
+    column_index = headers.index("Evaluation ID")
+    for row in data:
+        id_value = row[column_index]
+        if id_value:
+            unique_ids.add(id_value)
+    return sorted(unique_ids)
 
-def transform_and_create_from_row():
+
+def get_data_rows(filename):
+    data = []
+    with open(filename, 'r') as file:
+        reader = csv.reader(file)
+        _ = next(reader)
+        for row in reader:
+            data.append(row)
+        return data
+
+
+def get_evaluation_rows_for_id(unique_id, rows, headers):
+    column_index = headers.index("Evaluation ID")
+    matching_rows = [row for row in rows if row[column_index] == unique_id]
+    return matching_rows
+
+
+def transform_and_create_from_rows(rows):
+    return rows
+
 
 def import_and_upload_evaluations(url):
     filename = save_url_to_data_dir(url)
     headers = get_sheet_headers(filename)
-    print(headers)
+    rows = get_data_rows(filename)
+    unique_ids = get_evaluation_ids(rows, headers)
+    for unique_id in unique_ids:
+        rows_for_id = get_evaluation_rows_for_id(unique_id, rows, headers)
+        transform_and_create_from_rows(rows_for_id)
 
