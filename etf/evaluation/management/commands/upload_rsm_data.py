@@ -5,7 +5,7 @@ import httpx
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
-from etf.evaluation import choices
+from etf.evaluation import choices, enums
 from etf.evaluation.pages import get_default_page_statuses
 
 DATA_DIR = settings.BASE_DIR / "temp-data"
@@ -14,99 +14,335 @@ CHUNK_SIZE = 16 * 1024
 
 # Need maps for CSV headers to model property names
 
-generic_headers = {
-    "Evaluation title": "title",  # evaluation title
-    "Short title for evaluation": "short_title",  # short title
-    "Evaluation summary": "brief_description",  # Description
-    "Issue to be addressed": "issue_description",  # Issue description
-    "Who is expecting the issue": "those_experiencing_issue",  # those experiencing the issue
-    "Why the issue is important / why are improvements needed": "why_improvements_matter",  # why improvements matter
-    "Who does it matter to": "who_improvements_matter_to",  # who improvements matter to
-    "What difference the intervention intends to make": "issue_relevance",  # Issue relevance
-    "Studied population including location(s)": "studied_population",  # Studied population
-    "Eligibility criteria": "eligibility_criteria",  # Eligibility criteria
-    "Total number of people (or other unit) included in the evaluation": "sample_size",  # Sample size
-    "Type of unit": "sample_size_units",  # Sample size units
-    "Referral / recruitment route": "process_for_recruitment",  # Process for recruitment
-    "Referral / recruitment schedule": "recruitment_schedule",  # Recruitment schedule
-    "Impact - Design": "impact_design_name",  # Impact evaluation design
-    "Impact - Justification for design": "impact_design_justification",  # Impact design justification
-    "Impact - Features to reflect real-world implementation": "impact_design_features",  # Impact design features
-    "Impact - Description": "impact_design_description",  # Impact design description
-    "Impact - Equity": "impact_design_equity",  # Impact design equity
-    "Impact - Assumptions": "impact_design_assumptions",  # Impact design assumptions
-    "Impact - Limitations of approach": "impact_design_approach_limitations",  # Impact design approach limitations
-    "Economic - Costs included": "perspective_costs",  # Perspective: costs
-    "Economic - Benefits included": "perspective_benefits",  # Perspective: benefits
-    "Economic - Monetisation approach": "monetisation_approaches",  # Economic evaluation monetisation approaches
-    "Economic - Evaluation design": "economic_design_details",  # Economic evaluation design details,
-    "Other - Evaluation design": "other_design_type",  # Design type
-    "Other - Summary of methods": "other_design_details",  # Design details
-    # "Process - Description of analysis",  # Description of planned analysis
-    "Impact - Analysis framework": "impact_framework",  # Impact analysis Framework
-    "Impact - Analysis basis": "impact_basis",  # Analysis basis
-    "Impact - Analysis set": "impact_analysis_set",  # Analysis set
-    "Impact - Primary effect size measure type": "impact_effect_measure_type",  # Primary effect size measure type
-    "Impact - Primary effect size measure": "impact_primary_effect_size_measure",  # Primary effect size measure
-    "Impact - Primary effect size measure interval": "impact_effect_measure_interval",  # Primary effect size measure interval
-    "Impact - Primary effect size measure description": "impact_primary_effect_size_desc",  # Primary effect size measure description
-    "Impact - Interpretation type": "impact_interpretation_type",  # Interpretation type
-    "Impact - Sensitivity analysis": "impact_sensitivity_analysis",  # Sensitivity analysis
-    "Impact - Subgroup analysis": "impact_subgroup_analysis",  # Subgroup analysis
-    "Impact - Missing data handling": "impact_missing_data_handling",  # Missing data handling
-    "Impact - Fidelity of report": "impact_fidelity",  # Fidelity reporting
-    "Impact - Description of analysis": "impact_description_planned_analysis",  # Description of planned analysis
-    "Economic - Description of analysis": "economic_analysis_description",  # Description of planned analysis
-    "Other - Description of analysis": "other_analysis_description",  # Description of planned analysis
-    # "Process - Summary of findings": "",  # Summary findings
-    # "Process - Findings",  # Findings
-    "Economic - Summary of findings": "economic_summary_findings",  # Summary findings
-    "Economic - Findings": "economic_findings",  # Findings
-    "Other - Summary of findings": "other_summary_findings",  # Summary findings
-    "Other - Findings": "other_findings",  # Findings
-    "Ethics committee approval": "ethics_committee_approval",  # Ethics committee approval
-    "Ethics committee details": "ethics_committee_details",  # Ethics committee details
-    "Ethical state of study given existing evidence base": "ethical_state_given_existing_evidence_base",  # Ethical state of study given existing evidence base
-    "Risks to participants": "risks_to_participants",  # Risks to participants
-    "Risks to study team": "risks_to_study_team",  # Risks to study team
-    "Participant involvement": "participant_involvement",  # Participant involvement
-    "Participant consent (if no, why not)": "participant_consent",  # Participant consent
-    "Participant information": "participant_information",  # Participant information
-    "Participant payment (if yes, please elaborate)": "participant_payment",  # Participant payment
-    "Confidentiality and personal data": "confidentiality_and_personal_data",  # Confidentiality and personal data
-    "Breaking confidentiality": "breaking_confidentiality",  # Breaking confidentiality
-    "Other ethical information": "other_ethical_information",  # Other ethical information
+disallowed_row_values = (
+    "",
+    None,
+    "Information not identified within the report",
+    "Not identified",
+    "information not easily identified within the report",
+    "Other (please specify)",
+    "Not announced",
+)
+
+simple_headers = {
+    "Evaluation title": {"field_name": "title", "resolution_method": "single", "data_type": "str"},
+    "Short title for evaluation": {"field_name": "short_title", "resolution_method": "single", "data_type": "str"},
+    "Evaluation summary": {"field_name": "brief_description", "resolution_method": "combine", "data_type": "str"},
+    "Issue to be addressed": {"field_name": "issue_description", "resolution_method": "combine", "data_type": "str"},
+    "Who is experiencing the issue": {
+        "field_name": "those_experiencing_issue",
+        "resolution_method": "combine",
+        "data_type": "str",
+    },
+    "Why the issue is important / why are improvements needed": {
+        "field_name": "why_improvements_matter",
+        "resolution_method": "combine",
+        "data_type": "str",
+    },
+    "Who does it matter to": {
+        "field_name": "who_improvements_matter_to",
+        "resolution_method": "combine",
+        "data_type": "str",
+    },
+    "What difference the intervention intends to make": {
+        "field_name": "issue_relevance",
+        "resolution_method": "combine",
+        "data_type": "str",
+    },
+    "Studied population including location(s)": {
+        "field_name": "studied_population",
+        "resolution_method": "combine",
+        "data_type": "str",
+    },
+    "Eligibility criteria": {"field_name": "eligibility_criteria", "resolution_method": "combine", "data_type": "str"},
+    "Total number of people (or other unit) included in the evaluation": {
+        "field_name": "sample_size",
+        "resolution_method": "combine",
+        "data_type": "str",
+    },
+    "Type of unit": {"field_name": "sample_size_units", "resolution_method": "combine", "data_type": "str"},
+    "Referral / recruitment route": {
+        "field_name": "process_for_recruitment",
+        "resolution_method": "combine",
+        "data_type": "str",
+    },
+    "Referral / recruitment schedule": {
+        "field_name": "recruitment_schedule",
+        "resolution_method": "combine",
+        "data_type": "str",
+    },
+    "Impact - Design": {
+        "field_name": "impact_design_name",
+        "resolution_method": "multiple_choice",
+        "data_type": choices.ImpactEvalDesign,
+    },
+    "Impact - Justification for design": {
+        "field_name": "impact_design_justification",
+        "resolution_method": "combine",
+        "data_type": "str",
+    },
+    "Impact - Features to reflect real-world implementation": {
+        "field_name": "impact_design_features",
+        "resolution_method": "combine",
+        "data_type": "str",
+    },
+    "Impact - Description": {
+        "field_name": "impact_design_description",
+        "resolution_method": "combine",
+        "data_type": "str",
+    },
+    "Impact - Equity": {"field_name": "impact_design_equity", "resolution_method": "combine", "data_type": "str"},
+    "Impact - Assumptions": {
+        "field_name": "impact_design_assumptions",
+        "resolution_method": "combine",
+        "data_type": "str",
+    },
+    "Impact - Limitations of approach": {
+        "field_name": "impact_design_approach_limitations",
+        "resolution_method": "combine",
+        "data_type": "str",
+    },
+    "Economic - Costs included": {
+        "field_name": "perspective_costs",
+        "resolution_method": "combine",
+        "data_type": "str",
+    },
+    "Economic - Benefits included": {
+        "field_name": "perspective_benefits",
+        "resolution_method": "Combine",
+        "data_type": "str",
+    },
+    "Economic - Monetisation approach": {
+        "field_name": "monetisation_approaches",
+        "resolution_method": "combine",
+        "data_type": "str",
+    },
+    "Economic - Evaluation design": {
+        "field_name": "economic_design_details",
+        "resolution_method": "combine",
+        "data_type": "str",
+    },
+    "Other - Evaluation design": {
+        "field_name": "other_design_type",
+        "resolution_method": "combine",
+        "data_type": "str",
+    },
+    "Other - Summary of methods": {
+        "field_name": "other_design_details",
+        "resolution_method": "combine",
+        "data_type": "str",
+    },
+    "Impact - Analysis framework": {
+        "field_name": "impact_framework",
+        "resolution_method": "choice",
+        "data_type": choices.ImpactFramework,
+    },
+    "Impact - Analysis basis": {
+        "field_name": "impact_basis",
+        "resolution_method": "choice",
+        "data_type": choices.ImpactAnalysisBasis,
+    },
+    "Impact - Analysis set": {"field_name": "impact_analysis_set", "resolution_method": "combine", "data_type": "str"},
+    "Impact - Primary effect size measure type": {
+        "field_name": "impact_effect_measure_type",
+        "resolution_method": "choice",
+        "data_type": choices.ImpactMeasureType,
+    },
+    "Impact - Primary effect size measure": {
+        "field_name": "impact_primary_effect_size_measure",
+        "resolution_method": "combine",
+        "data_type": "str",
+    },
+    "Impact - Primary effect size measure interval": {
+        "field_name": "impact_effect_measure_interval",
+        "resolution_method": "choice",
+        "data_type": choices.ImpactMeasureInterval,
+    },
+    "Impact - Primary effect size measure description": {
+        "field_name": "impact_primary_effect_size_desc",
+        "resolution_method": "combine",
+        "data_type": "str",
+    },
+    "Impact - Interpretation type": {
+        "field_name": "impact_interpretation_type",
+        "resolution_method": "choice",
+        "data_type": choices.ImpactInterpretationType,
+    },
+    "Impact - Sensitivity analysis": {
+        "field_name": "impact_sensitivity_analysis",
+        "resolution_method": "combine",
+        "data_type": "str",
+    },
+    "Impact - Subgroup analysis": {
+        "field_name": "impact_subgroup_analysis",
+        "resolution_method": "combine",
+        "data_type": "str",
+    },
+    "Impact - Missing data handling": {
+        "field_name": "impact_missing_data_handling",
+        "resolution_method": "combine",
+        "data_type": "str",
+    },
+    "Impact - Fidelity of report": {
+        "field_name": "impact_fidelity",
+        "resolution_method": "choice",
+        "data_type": choices.YesNo,
+    },
+    "Impact - Description of analysis": {
+        "field_name": "impact_description_planned_analysis",
+        "resolution_method": "combine",
+        "data_type": "str",
+    },
+    "Economic - Description of analysis": {
+        "field_name": "economic_analysis_description",
+        "resolution_method": "combine",
+        "data_type": "str",
+    },
+    "Other - Description of analysis": {
+        "field_name": "other_analysis_description",
+        "resolution_method": "combine",
+        "data_type": "str",
+    },
+    "Economic - Summary of findings": {
+        "field_name": "economic_summary_findings",
+        "resolution_method": "combine",
+        "data_type": "str",
+    },
+    "Economic - Findings": {"field_name": "economic_findings", "resolution_method": "combine", "data_type": "str"},
+    "Other - Summary of findings": {
+        "field_name": "other_summary_findings",
+        "resolution_method": "combine",
+        "data_type": "str",
+    },
+    "Other - Findings": {"field_name": "other_findings", "resolution_method": "combine", "data_type": "str"},
+    "Ethics committee approval": {
+        "field_name": "ethics_committee_approval",
+        "resolution_method": "choice",
+        "data_type": choices.YesNo,
+    },
+    "Ethics committee details": {
+        "field_name": "ethics_committee_details",
+        "resolution_method": "combine",
+        "data_type": "str",
+    },
+    "Ethical state of study given existing evidence base": {
+        "field_name": "ethical_state_given_existing_evidence_base",
+        "resolution_method": "combine",
+        "data_type": "str",
+    },
+    "Risks to participants": {
+        "field_name": "risks_to_participants",
+        "resolution_method": "combine",
+        "data_type": "str",
+    },
+    "Risks to study team": {"field_name": "risks_to_study_team", "resolution_method": "combine", "data_type": "str"},
+    "Participant involvement": {
+        "field_name": "participant_involvement",
+        "resolution_method": "combine",
+        "data_type": "str",
+    },
+    "Participant consent (if no, why not)": {
+        "field_name": "participant_consent",
+        "resolution_method": "combine",
+        "data_type": "str",
+    },
+    "Participant information": {
+        "field_name": "participant_information",
+        "resolution_method": "combine",
+        "data_type": "str",
+    },
+    "Participant payment (if yes, please elaborate)": {
+        "field_name": "participant_payment",
+        "resolution_method": "combine",
+        "data_type": "str",
+    },
+    "Confidentiality and personal data": {
+        "field_name": "confidentiality_and_personal_data",
+        "resolution_method": "combine",
+        "data_type": "str",
+    },
+    "Breaking confidentiality": {
+        "field_name": "breaking_confidentiality",
+        "resolution_method": "combine",
+        "data_type": "str",
+    },
+    "Other ethical information": {
+        "field_name": "other_ethical_information",
+        "resolution_method": "combine",
+        "data_type": "str",
+    },
 }
 
-evaluation_type_headers = (
-    "Process",  # Process evaluation
-    "Impact",  # Impact evaluation
-    "Economic",  # Economic evaluation
-    "Other evaluation type (please state)",  # Other evaluation
-)
-
-organisations_headers = (
-    "Government departments",  # Organisation
-)
+organisations_headers = {
+    "Government departments": {
+        "field_name": "organisations",
+        "resolution_type": "multiple_choice",
+        "data_type": enums.Organisation.choices,
+    }
+}  # Organisation
 
 # Outcome measure
 outcome_measure_headers = {
-    "Outcome title": "name",  # Outcome name
-    "Primary or secondary outcome": "primary_or_secondary",  # Primary or secondary
-    "Direct or surrogate": "direct_or_surrogate",  # Direct or surrogate
-    "Measure type": "measure_type",  # Measure type
-    "Description of measure": "description",  # Description of measure
-    "Collection procedures": "collection_process",  # Collection process
-    "Minimum practically important difference": "minimum_difference",  # Minimum practically important difference
-    "Relevance of outcome": "relevance",  # Relevance of outcome
+    "Outcome title": {
+        "field_name": "name",
+        "resolution_type": "single",
+        "data_type": "str",
+    },
+    "Primary or secondary outcome": {
+        "field_name": "primary_or_secondary",
+        "resolution_method": "choice",
+        "data_type": choices.OutcomeType,
+    },
+    "Direct or surrogate": {
+        "field_name": "direct_or_surrogate",
+        "resolution_method": "choice",
+        "data_type": choices.OutcomeMeasure,
+    },
+    "Measure type": {"field_name": "measure_type", "resolution_method": "choice", "data_type": choices.MeasureType},
+    "Description of measure": {
+        "field_name": "description",
+        "resolution_type": "single",
+        "data_type": "str",
+    },
+    "Collection procedures": {
+        "field_name": "collection_process",
+        "resolution_type": "single",
+        "data_type": "str",
+    },
+    "Minimum practically important difference": {
+        "field_name": "minimum_difference",
+        "resolution_type": "single",
+        "data_type": "str",
+    },
+    "Relevance of outcome": {
+        "field_name": "relevance",
+        "resolution_type": "single",
+        "data_type": "str",
+    },
 }
 
 # Other measure
 other_measure_headers = {
-    "Other outcomes - Outcome name": "name",  # Measurement name
-    "Other outcomes - Outcome measure type": "measure_type",  # Measure type
-    "Other outcomes - Description of measure": "description",  # Description of measurement
-    "Other outcomes - Collection procedures and timing": "collection_process",  # Collection procedures and timing
+    "Other outcomes - Outcome name": {
+        "field_name": "name",
+        "resolution_type": "single",
+        "data_type": "str",
+    },
+    "Other outcomes - Outcome measure type": {
+        "field_name": "measure_type",
+        "resolution_method": "choice",
+        "data_type": choices.MeasureType,
+    },
+    "Other outcomes - Description of measure": {
+        "field_name": "description",
+        "resolution_type": "single",
+        "data_type": "str",
+    },
+    "Other outcomes - Collection procedures and timing": {
+        "field_name": "collection_process",
+        "resolution_type": "single",
+        "data_type": "str",
+    },
 }
 
 # Grants
@@ -114,24 +350,80 @@ grant_headers = {}
 
 # Links
 links_headers = {
-    "Links to associated docments": "link_or_identifier",
+    "Links to associated docments": {
+        "field_name": "link_or_identifier",
+        "resolution_type": "single",
+        "data_type": "str",
+    },
 }
 
 # Interventions
 intervention_headers = {
-    "Intervention name": "name",  # Intervention name
-    "Intervention brief description": "brief_description",  # Intervention brief description
-    "Intervention rationale": "rationale",  # Intervention rationale
-    "Materials used": "materials_used",  # Intervention materials used
-    "Procedures used": "procedures",  # Intervention procedures
-    "Who delivered the intervention": "provider_description",  # Intervention provider description
-    "How was the intervention delivered": "modes_of_delivery",  # Intervention modes of delivery
-    "Where was the intervention delivered": "location",  # Intervention location
-    "How often the intervention was delivered": "frequency_of_delivery",  # Intervention frequency of delivery
-    "Tailoring": "tailoring",  # Intervention tailoring
-    "How well it was delivered (fidelity)": "fidelity",  # Intervention fidelity
-    "Resource requirements": "resource_requirements",  # Intervention resource requirements
-    "Geographical information": "geographical_information",  # Intervention geographical information
+    "Intervention name": {
+        "field_name": "name",
+        "resolution_type": "single",
+        "data_type": "str",
+    },
+    "Intervention brief description": {
+        "field_name": "brief_description",
+        "resolution_type": "combine",
+        "data_type": "str",
+    },
+    "Intervention rationale":{
+        "field_name": "rationale",
+        "resolution_type": "combine",
+        "data_type": "str",
+    },
+    "Materials used":{
+        "field_name": "materials_used",
+        "resolution_type": "combine",
+        "data_type": "str",
+    },
+    "Procedures used":{
+        "field_name": "procedures",
+        "resolution_type": "combine",
+        "data_type": "str",
+    },
+    "Who delivered the intervention":{
+        "field_name": "provider_description",
+        "resolution_type": "combine",
+        "data_type": "str",
+    },
+    "How was the intervention delivered":{
+        "field_name": "modes_of_delivery",
+        "resolution_type": "combine",
+        "data_type": "str",
+    },
+    "Where was the intervention delivered":{
+        "field_name": "location",
+        "resolution_type": "combine",
+        "data_type": "str",
+    },
+    "How often the intervention was delivered":{
+        "field_name": "frequency_of_delivery",
+        "resolution_type": "combine",
+        "data_type": "str",
+    },
+    "Tailoring":{
+        "field_name": "tailoring",
+        "resolution_type": "combine",
+        "data_type": "str",
+    },
+    "How well it was delivered (fidelity)":{
+        "field_name": "fidelity",
+        "resolution_type": "combine",
+        "data_type": "str",
+    },
+    "Resource requirements":{
+        "field_name": "resource_requirements",
+        "resolution_type": "combine",
+        "data_type": "str",
+    },
+    "Geographical information":{
+        "field_name": "geographical_information",
+        "resolution_type": "combine",
+        "data_type": "str",
+    },
 }
 
 # Event dates
@@ -139,13 +431,21 @@ event_date_headers = {}
 
 # Evaluation costs
 evaluation_cost_headers = {
-    "Evaluation cost (£)": "item_cost",
+    "Evaluation cost (£)":{
+        "field_name": "item_cost",
+        "resolution_type": "combine",
+        "data_type": "str",
+    },
 }
 
 # Processes and standards
 processes_and_standards_headers = {
     "Name of standard or process": "name",  # Name of standard of process
-    "Conformity": "conformity",  # Conformity of standard or process
+    "Conformity": {
+        "field_name": "conformity",
+        "resolution_method": "choice",
+        "data_type": choices.FullNoPartial,
+    },
     "Process and standards - Description": "description",  # Description of standard or process
 }
 
@@ -154,51 +454,26 @@ unique_field_headers = (
     "Intervention start date (Year)",  # Intervention - when ?
     "Intervention end date (Month)",  # Intervention - when ?
     "Intervention end date (Year)",  # Intervention - when ?
-    "Time point of interest (Month)",  # Timepoint(s) of interest
-    "Time point of interest (Year)",  # Timepoint(s) of interest
-    "aspect_name",  # Used by two models, with different option lists in each
+    "Time point of intesest (Month)",  # Timepoint(s) of interest, intended typo
+    "Time point of intesest (Year)",  # Timepoint(s) of interest, intended typo
 )
 
-single_choice_fields = {
-    "ethics_committee_approval": choices.YesNo,
-    "impact_framework": choices.ImpactFramework,
-    "impact_basis": choices.ImpactAnalysisBasis,
-    "impact_effect_measure_type": choices.ImpactMeasureType,
-    "impact_effect_measure_interval": choices.ImpactMeasureInterval,
-    "impact_interpretation_type": choices.ImpactInterpretationType,
-    "impact_fidelity": choices.YesNo,
-    "economic_type": choices.EconomicEvaluationType,
-    "impact_interpretation": choices.ImpactEvalInterpretation,
-    "primary_or_secondary": choices.OutcomeType,
-    "direct_or_surrogate": choices.OutcomeMeasure,
-    "measure_type": choices.MeasureType,  # For both Other and Outcome measures
-    "conformity": choices.FullNoPartial,
-    "event_date_name": choices.EventDateOption,
-    "event_date_type": choices.EventDateType,
-    "method_name": choices.ProcessEvaluationMethods,
-}
-
-multiple_choice_fields = {
-    "impact_design_name": choices.ImpactEvalDesign,
-    "document_types": choices.DocumentType,
-    "aspects_measured": choices.ProcessEvaluationAspects,
-}
-
-default_fields = {
-    "visibility": "DRAFT",
-    "page_statuses": get_default_page_statuses()
-}
+default_fields = {"visibility": "DRAFT", "page_statuses": get_default_page_statuses()}
 
 derived_fields = (
     "issue_description_option",
     "ethics_option",
     "grants_option",
+    "Process",  # Process evaluation
+    "Impact",  # Impact evaluation
+    "Economic",  # Economic evaluation
+    "Other evaluation type (please state)",  # Other evaluation
 )
 
 
 # TODO: List contains all relevant headers
 all_headers = (
-    list(key for key in generic_headers.keys())
+    list(key for key in simple_headers.keys())
     + list(key for key in outcome_measure_headers.keys())
     + list(key for key in other_measure_headers.keys())
     + list(key for key in grant_headers.keys())
@@ -240,8 +515,7 @@ def get_sheet_headers(filename):
     with open(filename, "r") as file:
         reader = csv.reader(file)
         headers = next(reader)
-    for header in headers:
-        print(header)
+        headers = [header for header in headers if header != ""]
     return headers
 
 
@@ -271,8 +545,13 @@ def get_evaluation_rows_for_id(unique_id, rows, headers):
     return matching_rows
 
 
-def transform_and_create_from_rows(rows):
-    # print(rows)
+def transform_and_create_from_rows(rows, headers):
+    for header in headers:
+        if header in simple_headers.keys():
+            values_of_header_rows = [
+                row[headers.index(header)] for row in rows if row[headers.index(header)] not in disallowed_row_values
+            ]
+            #
     return rows
 
 
@@ -281,9 +560,9 @@ def import_and_upload_evaluations(url):
     headers = get_sheet_headers(filename)
     rows = get_data_rows(filename)
     unique_ids = get_evaluation_ids(rows, headers)
-    unique_id = unique_ids[0]
-    rows_for_id = get_evaluation_rows_for_id(unique_id, rows, headers)
-    transform_and_create_from_rows([rows_for_id[0]])
-    # for unique_id in unique_ids:
-    #     rows_for_id = get_evaluation_rows_for_id(unique_id, rows, headers)
-    #     transform_and_create_from_rows(rows_for_id)
+    # unique_id = unique_ids[0]
+    # rows_for_id = get_evaluation_rows_for_id(unique_id, rows, headers)
+    # transform_and_create_from_rows([rows_for_id])
+    for unique_id in unique_ids:
+        rows_for_id = get_evaluation_rows_for_id(unique_id, rows, headers)
+        transform_and_create_from_rows(rows_for_id, headers)
