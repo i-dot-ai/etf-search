@@ -5,7 +5,7 @@ import httpx
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
-from etf.evaluation import choices, enums
+from etf.evaluation import choices, enums, models
 from etf.evaluation.pages import get_default_page_statuses
 
 DATA_DIR = settings.BASE_DIR / "temp-data"
@@ -24,7 +24,7 @@ disallowed_row_values = (
     "Not announced",
 )
 
-simple_headers = {
+evaluation_headers = {
     "Evaluation title": {"field_name": "title", "resolution_method": "single", "data_type": "str"},
     "Short title for evaluation": {"field_name": "short_title", "resolution_method": "single", "data_type": "str"},
     "Evaluation summary": {"field_name": "brief_description", "resolution_method": "combine", "data_type": "str"},
@@ -55,10 +55,10 @@ simple_headers = {
         "data_type": "str",
     },
     "Eligibility criteria": {"field_name": "eligibility_criteria", "resolution_method": "combine", "data_type": "str"},
-    "Total number of people (or other unit) included in the evaluation": {
+    "Total number of people (or other unit) included in the evaluation": { # TODO: Figure out adding all text from this field into sample_size_details
         "field_name": "sample_size",
         "resolution_method": "combine",
-        "data_type": "str",
+        "data_type": "int",
     },
     "Type of unit": {"field_name": "sample_size_units", "resolution_method": "combine", "data_type": "str"},
     "Referral / recruitment route": {
@@ -276,7 +276,7 @@ simple_headers = {
 organisations_headers = {
     "Government departments": {
         "field_name": "organisations",
-        "resolution_type": "multiple_choice",
+        "resolution_method": "multiple_choice",
         "data_type": enums.Organisation.choices,
     }
 }  # Organisation
@@ -285,7 +285,7 @@ organisations_headers = {
 outcome_measure_headers = {
     "Outcome title": {
         "field_name": "name",
-        "resolution_type": "single",
+        "resolution_method": "single",
         "data_type": "str",
     },
     "Primary or secondary outcome": {
@@ -301,22 +301,22 @@ outcome_measure_headers = {
     "Measure type": {"field_name": "measure_type", "resolution_method": "choice", "data_type": choices.MeasureType},
     "Description of measure": {
         "field_name": "description",
-        "resolution_type": "single",
+        "resolution_method": "single",
         "data_type": "str",
     },
     "Collection procedures": {
         "field_name": "collection_process",
-        "resolution_type": "single",
+        "resolution_method": "single",
         "data_type": "str",
     },
     "Minimum practically important difference": {
         "field_name": "minimum_difference",
-        "resolution_type": "single",
+        "resolution_method": "single",
         "data_type": "str",
     },
     "Relevance of outcome": {
         "field_name": "relevance",
-        "resolution_type": "single",
+        "resolution_method": "single",
         "data_type": "str",
     },
 }
@@ -325,7 +325,7 @@ outcome_measure_headers = {
 other_measure_headers = {
     "Other outcomes - Outcome name": {
         "field_name": "name",
-        "resolution_type": "single",
+        "resolution_method": "single",
         "data_type": "str",
     },
     "Other outcomes - Outcome measure type": {
@@ -335,12 +335,12 @@ other_measure_headers = {
     },
     "Other outcomes - Description of measure": {
         "field_name": "description",
-        "resolution_type": "single",
+        "resolution_method": "single",
         "data_type": "str",
     },
     "Other outcomes - Collection procedures and timing": {
         "field_name": "collection_process",
-        "resolution_type": "single",
+        "resolution_method": "single",
         "data_type": "str",
     },
 }
@@ -352,7 +352,7 @@ grant_headers = {}
 links_headers = {
     "Links to associated docments": {
         "field_name": "link_or_identifier",
-        "resolution_type": "single",
+        "resolution_method": "single",
         "data_type": "str",
     },
 }
@@ -361,67 +361,67 @@ links_headers = {
 intervention_headers = {
     "Intervention name": {
         "field_name": "name",
-        "resolution_type": "single",
+        "resolution_method": "single",
         "data_type": "str",
     },
     "Intervention brief description": {
         "field_name": "brief_description",
-        "resolution_type": "combine",
+        "resolution_method": "combine",
         "data_type": "str",
     },
     "Intervention rationale":{
         "field_name": "rationale",
-        "resolution_type": "combine",
+        "resolution_method": "combine",
         "data_type": "str",
     },
     "Materials used":{
         "field_name": "materials_used",
-        "resolution_type": "combine",
+        "resolution_method": "combine",
         "data_type": "str",
     },
     "Procedures used":{
         "field_name": "procedures",
-        "resolution_type": "combine",
+        "resolution_method": "combine",
         "data_type": "str",
     },
     "Who delivered the intervention":{
         "field_name": "provider_description",
-        "resolution_type": "combine",
+        "resolution_method": "combine",
         "data_type": "str",
     },
     "How was the intervention delivered":{
         "field_name": "modes_of_delivery",
-        "resolution_type": "combine",
+        "resolution_method": "combine",
         "data_type": "str",
     },
     "Where was the intervention delivered":{
         "field_name": "location",
-        "resolution_type": "combine",
+        "resolution_method": "combine",
         "data_type": "str",
     },
     "How often the intervention was delivered":{
         "field_name": "frequency_of_delivery",
-        "resolution_type": "combine",
+        "resolution_method": "combine",
         "data_type": "str",
     },
     "Tailoring":{
         "field_name": "tailoring",
-        "resolution_type": "combine",
+        "resolution_method": "combine",
         "data_type": "str",
     },
     "How well it was delivered (fidelity)":{
         "field_name": "fidelity",
-        "resolution_type": "combine",
+        "resolution_method": "combine",
         "data_type": "str",
     },
     "Resource requirements":{
         "field_name": "resource_requirements",
-        "resolution_type": "combine",
+        "resolution_method": "combine",
         "data_type": "str",
     },
     "Geographical information":{
         "field_name": "geographical_information",
-        "resolution_type": "combine",
+        "resolution_method": "combine",
         "data_type": "str",
     },
 }
@@ -433,7 +433,7 @@ event_date_headers = {}
 evaluation_cost_headers = {
     "Evaluation cost (£)":{
         "field_name": "item_cost",
-        "resolution_type": "combine",
+        "resolution_method": "combine",
         "data_type": "str",
     },
 }
@@ -461,19 +461,20 @@ unique_field_headers = (
 default_fields = {"visibility": "DRAFT", "page_statuses": get_default_page_statuses()}
 
 derived_fields = (
-    "issue_description_option",
-    "ethics_option",
-    "grants_option",
-    "Process",  # Process evaluation
-    "Impact",  # Impact evaluation
-    "Economic",  # Economic evaluation
-    "Other evaluation type (please state)",  # Other evaluation
+    "issue_description_option",  # Evaluation optional page
+    "ethics_option",  # Evaluation optional page
+    "grants_option",  # Evaluation optional page
+    "Process",  # Evaluation type option
+    "Impact",  # Evaluation type option
+    "Economic",  # Evaluation type option
+    "Other evaluation type (please state)",  # Evaluation type option
+    "sample_size_details",  # Taken from sample_size column and all text goes here instead
 )
 
 
 # TODO: List contains all relevant headers
 all_headers = (
-    list(key for key in simple_headers.keys())
+    list(key for key in evaluation_headers.keys())
     + list(key for key in outcome_measure_headers.keys())
     + list(key for key in other_measure_headers.keys())
     + list(key for key in grant_headers.keys())
@@ -545,13 +546,52 @@ def get_evaluation_rows_for_id(unique_id, rows, headers):
     return matching_rows
 
 
+def handle_simple_field(model, header_entry, values_of_header_rows):
+    if values_of_header_rows is [] or None:
+        if header_entry["resolution_method"] == "combine":
+            if header_entry["data_type"] == "str":
+                value = ". ".join(s if s.endswith(".") else s + "." for s in values_of_header_rows)
+            else:
+                value = sum(float(v) for v in values_of_header_rows if v.isdigit())
+        elif header_entry["resolution_method"] == "single":
+            if header_entry["data_type"] == "str":
+                value = max(set(values_of_header_rows), key=values_of_header_rows.count)
+            else:
+                all_float_values = [float(v) for v in values_of_header_rows if v.isdigit()]
+                value = max(all_float_values) if (all_float_values is not [] and all_float_values is not None) else 0
+        else:
+
+            value = "" if header_entry["data_type"] == "str" else 0
+    else:
+        value = "" if header_entry["data_type"] == "str" else 0
+    setattr(model, header_entry["field_name"], value)
+    model.save()
+
+
 def transform_and_create_from_rows(rows, headers):
+    evaluation = models.Evaluation.objects.create()
+    evaluation.save()
+
+    # Check header type from dict
+    # Functions for each type
+    # Assign evaluation value based on header value, type and resolution type (make sure remove values from disallowed values array)
+    # Organisation needs to be split by ';', stripped and compared in a 'contain' query
+
+    # Evaluation headers
     for header in headers:
-        if header in simple_headers.keys():
+        if header in evaluation_headers:
+
+            header_entry = evaluation_headers[header]
             values_of_header_rows = [
-                row[headers.index(header)] for row in rows if row[headers.index(header)] not in disallowed_row_values
+                row[headers.index(header)]
+                for row in rows
+                if all(disallowed_value not in row[headers.index(header)] for disallowed_value in disallowed_row_values)
             ]
-            #
+            if header_entry["data_type"] in ("str", "int",):
+                handle_simple_field(evaluation, header_entry, values_of_header_rows)
+
+    # Derived evaluation headers
+
     return rows
 
 
@@ -560,9 +600,6 @@ def import_and_upload_evaluations(url):
     headers = get_sheet_headers(filename)
     rows = get_data_rows(filename)
     unique_ids = get_evaluation_ids(rows, headers)
-    # unique_id = unique_ids[0]
-    # rows_for_id = get_evaluation_rows_for_id(unique_id, rows, headers)
-    # transform_and_create_from_rows([rows_for_id])
     for unique_id in unique_ids:
         rows_for_id = get_evaluation_rows_for_id(unique_id, rows, headers)
         transform_and_create_from_rows(rows_for_id, headers)
