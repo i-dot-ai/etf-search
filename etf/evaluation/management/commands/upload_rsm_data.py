@@ -15,13 +15,25 @@ CHUNK_SIZE = 16 * 1024
 # Need maps for CSV headers to model property names
 
 disallowed_row_values = (
-    "",
-    None,
     "Information not identified within the report",
+    "Information not identified in the report",
     "Not identified",
     "information not easily identified within the report",
     "Other (please specify)",
     "Not announced",
+    "N/A",
+)
+
+positive_row_values = (
+    "y",
+    "yes",
+    "true",
+)
+
+negative_row_values = (
+    "n",
+    "no",
+    "false",
 )
 
 evaluation_headers = {
@@ -55,12 +67,12 @@ evaluation_headers = {
         "data_type": "str",
     },
     "Eligibility criteria": {"field_name": "eligibility_criteria", "resolution_method": "combine", "data_type": "str"},
-    "Total number of people (or other unit) included in the evaluation": { # TODO: Figure out adding all text from this field into sample_size_details
+    "Total number of people (or other unit) included in the evaluation": {  # TODO: Figure out adding all text from this field into sample_size_details
         "field_name": "sample_size",
         "resolution_method": "combine",
         "data_type": "int",
     },
-    "Type of unit": {"field_name": "sample_size_units", "resolution_method": "combine", "data_type": "str"},
+    "Type of unit": {"field_name": "sample_size_units", "resolution_method": "single", "data_type": "str"},
     "Referral / recruitment route": {
         "field_name": "process_for_recruitment",
         "resolution_method": "combine",
@@ -243,7 +255,7 @@ evaluation_headers = {
     },
     "Participant consent (if no, why not)": {
         "field_name": "participant_consent",
-        "resolution_method": "combine",
+        "resolution_method": "single",
         "data_type": "str",
     },
     "Participant information": {
@@ -273,13 +285,14 @@ evaluation_headers = {
     },
 }
 
+# Organisation
 organisations_headers = {
     "Government departments": {
         "field_name": "organisations",
         "resolution_method": "multiple_choice",
         "data_type": enums.Organisation.choices,
     }
-}  # Organisation
+}
 
 # Outcome measure
 outcome_measure_headers = {
@@ -369,57 +382,57 @@ intervention_headers = {
         "resolution_method": "combine",
         "data_type": "str",
     },
-    "Intervention rationale":{
+    "Intervention rationale": {
         "field_name": "rationale",
         "resolution_method": "combine",
         "data_type": "str",
     },
-    "Materials used":{
+    "Materials used": {
         "field_name": "materials_used",
         "resolution_method": "combine",
         "data_type": "str",
     },
-    "Procedures used":{
+    "Procedures used": {
         "field_name": "procedures",
         "resolution_method": "combine",
         "data_type": "str",
     },
-    "Who delivered the intervention":{
+    "Who delivered the intervention": {
         "field_name": "provider_description",
         "resolution_method": "combine",
         "data_type": "str",
     },
-    "How was the intervention delivered":{
+    "How was the intervention delivered": {
         "field_name": "modes_of_delivery",
         "resolution_method": "combine",
         "data_type": "str",
     },
-    "Where was the intervention delivered":{
+    "Where was the intervention delivered": {
         "field_name": "location",
         "resolution_method": "combine",
         "data_type": "str",
     },
-    "How often the intervention was delivered":{
+    "How often the intervention was delivered": {
         "field_name": "frequency_of_delivery",
         "resolution_method": "combine",
         "data_type": "str",
     },
-    "Tailoring":{
+    "Tailoring": {
         "field_name": "tailoring",
         "resolution_method": "combine",
         "data_type": "str",
     },
-    "How well it was delivered (fidelity)":{
+    "How well it was delivered (fidelity)": {
         "field_name": "fidelity",
         "resolution_method": "combine",
         "data_type": "str",
     },
-    "Resource requirements":{
+    "Resource requirements": {
         "field_name": "resource_requirements",
         "resolution_method": "combine",
         "data_type": "str",
     },
-    "Geographical information":{
+    "Geographical information": {
         "field_name": "geographical_information",
         "resolution_method": "combine",
         "data_type": "str",
@@ -431,7 +444,7 @@ event_date_headers = {}
 
 # Evaluation costs
 evaluation_cost_headers = {
-    "Evaluation cost (£)":{
+    "Evaluation cost (£)": {
         "field_name": "item_cost",
         "resolution_method": "combine",
         "data_type": "str",
@@ -460,16 +473,16 @@ unique_field_headers = (
 
 default_fields = {"visibility": "DRAFT", "page_statuses": get_default_page_statuses()}
 
-derived_fields = (
-    "issue_description_option",  # Evaluation optional page
-    "ethics_option",  # Evaluation optional page
-    "grants_option",  # Evaluation optional page
-    "Process",  # Evaluation type option
-    "Impact",  # Evaluation type option
-    "Economic",  # Evaluation type option
-    "Other evaluation type (please state)",  # Evaluation type option
-    "sample_size_details",  # Taken from sample_size column and all text goes here instead
-)
+derived_fields = {
+    "issue_description_option": "Issue to be addressed",  # Evaluation optional page
+    "ethics_option": "Ethics committee approval",  # Evaluation optional page
+    # "grants_option",  # Evaluation optional page, not present in CSV yet
+    "process_evaluation": "Process",  # Evaluation type option
+    "impact_evaluation": "Impact",  # Evaluation type option
+    "economic_evaluation": "Economic",  # Evaluation type option
+    "other_evaluation": "Other evaluation type (please state)",  # Evaluation type option
+    "sample_size_details": "Total number of people (or other unit) included in the evaluation",  # Taken from sample_size column and all text goes here instead
+}
 
 
 # TODO: List contains all relevant headers
@@ -546,8 +559,27 @@ def get_evaluation_rows_for_id(unique_id, rows, headers):
     return matching_rows
 
 
+def get_values_from_rows_for_header(rows, header, headers):
+    values_of_header_rows = [
+        row[headers.index(header)]
+        for row in rows
+    ]
+
+    # Removed empty and unwanted values
+    allowed_values = []
+    for value in values_of_header_rows:
+        contains_disallowed = False
+        for disallowed in disallowed_row_values:
+            if disallowed in value or value.strip() == "" or value is None:
+                contains_disallowed = True
+                break
+        if not contains_disallowed:
+            allowed_values.append(value)
+    return allowed_values
+
+
 def handle_simple_field(model, header_entry, values_of_header_rows):
-    if values_of_header_rows is [] or None:
+    if values_of_header_rows:
         if header_entry["resolution_method"] == "combine":
             if header_entry["data_type"] == "str":
                 value = ". ".join(s if s.endswith(".") else s + "." for s in values_of_header_rows)
@@ -560,12 +592,69 @@ def handle_simple_field(model, header_entry, values_of_header_rows):
                 all_float_values = [float(v) for v in values_of_header_rows if v.isdigit()]
                 value = max(all_float_values) if (all_float_values is not [] and all_float_values is not None) else 0
         else:
-
             value = "" if header_entry["data_type"] == "str" else 0
     else:
         value = "" if header_entry["data_type"] == "str" else 0
     setattr(model, header_entry["field_name"], value)
     model.save()
+
+
+def handle_derived_evaluation_fields(evaluation, rows, headers):
+    issue_description_row_values = get_values_from_rows_for_header(
+        rows, derived_fields["issue_description_option"], headers
+    )
+    if issue_description_row_values is not None and issue_description_row_values is not []:
+        setattr(evaluation, "issue_description_option", "YES")
+    else:
+        setattr(evaluation, "issue_description_option", "NO")
+        evaluation.save()
+
+    ethics_row_values = get_values_from_rows_for_header(rows, derived_fields["ethics_option"], headers)
+    if ethics_row_values is not None and ethics_row_values is not []:
+        setattr(evaluation, "ethics_option", "YES")
+    else:
+        setattr(evaluation, "ethics_option", "NO")
+        evaluation.save()
+
+    # "grants_option",  # Evaluation optional page, not there in report
+    evaluation_types = []
+    process_evaluation_row_values = get_values_from_rows_for_header(rows, derived_fields["process_evaluation"], headers)
+    process_evaluation_row_values_yes = sum(1 for row_value in process_evaluation_row_values if row_value in positive_row_values)
+    process_evaluation_row_values_no = sum(1 for row_value in process_evaluation_row_values if row_value in negative_row_values)
+    if process_evaluation_row_values_no > process_evaluation_row_values_yes:
+        evaluation_types.append(choices.EvaluationTypeOptions.PROCESS.value)
+
+    impact_evaluation_row_values = get_values_from_rows_for_header(rows, derived_fields["impact_evaluation"], headers)
+    impact_evaluation_row_values_yes = sum(
+        1 for row_value in impact_evaluation_row_values if row_value in positive_row_values)
+    impact_evaluation_row_values_no = sum(
+        1 for row_value in impact_evaluation_row_values if row_value in negative_row_values)
+    if impact_evaluation_row_values_no > impact_evaluation_row_values_yes:
+        evaluation_types.append(choices.EvaluationTypeOptions.IMPACT.value)
+
+    economic_evaluation_row_values = get_values_from_rows_for_header(rows, derived_fields["economic_evaluation"], headers)
+    economic_evaluation_row_values_yes = sum(
+        1 for row_value in economic_evaluation_row_values if row_value in positive_row_values)
+    economic_evaluation_row_values_no = sum(
+        1 for row_value in economic_evaluation_row_values if row_value in negative_row_values)
+    if economic_evaluation_row_values_no > economic_evaluation_row_values_yes:
+        evaluation_types.append(choices.EvaluationTypeOptions.ECONOMIC.value)
+
+    other_evaluation_row_values = get_values_from_rows_for_header(rows, derived_fields["other_evaluation"],
+                                                                     headers)
+    other_evaluation_row_values_yes = sum(
+        1 for row_value in other_evaluation_row_values if row_value.lower() in positive_row_values)
+    other_evaluation_row_values_no = sum(
+        1 for row_value in other_evaluation_row_values if row_value.lower() in negative_row_values)
+    if other_evaluation_row_values_no > other_evaluation_row_values_yes:
+        evaluation_types.append(choices.EvaluationTypeOptions.OTHER.value)
+    setattr(evaluation, "evaluation_type", evaluation_types)
+    "Process",  # Evaluation type option
+    "Impact",  # Evaluation type option
+    "Economic",  # Evaluation type option
+    "Other evaluation type (please state)",  # Evaluation type option
+
+    "sample_size_details",  # Taken from sample_size column and all text goes here instead
 
 
 def transform_and_create_from_rows(rows, headers):
@@ -580,17 +669,16 @@ def transform_and_create_from_rows(rows, headers):
     # Evaluation headers
     for header in headers:
         if header in evaluation_headers:
-
             header_entry = evaluation_headers[header]
-            values_of_header_rows = [
-                row[headers.index(header)]
-                for row in rows
-                if all(disallowed_value not in row[headers.index(header)] for disallowed_value in disallowed_row_values)
-            ]
-            if header_entry["data_type"] in ("str", "int",):
+            values_of_header_rows = get_values_from_rows_for_header(rows, header, headers)
+            if header_entry["data_type"] in (
+                "str",
+                "int",
+            ):
                 handle_simple_field(evaluation, header_entry, values_of_header_rows)
 
     # Derived evaluation headers
+    handle_derived_evaluation_fields(evaluation, rows, headers)
 
     return rows
 
@@ -600,6 +688,6 @@ def import_and_upload_evaluations(url):
     headers = get_sheet_headers(filename)
     rows = get_data_rows(filename)
     unique_ids = get_evaluation_ids(rows, headers)
-    for unique_id in unique_ids:
+    for unique_id in unique_ids[0:2]:
         rows_for_id = get_evaluation_rows_for_id(unique_id, rows, headers)
         transform_and_create_from_rows(rows_for_id, headers)
