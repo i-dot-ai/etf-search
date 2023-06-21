@@ -582,7 +582,7 @@ def handle_simple_field(model, header_entry, values_of_header_rows):
     if values_of_header_rows:
         if header_entry["resolution_method"] == "combine":
             if header_entry["data_type"] == "str":
-                value = ". ".join(s if s.endswith(".") else s + "." for s in values_of_header_rows)
+                value = ". ".join(s.strip().rstrip(".") for s in values_of_header_rows) + "."
             else:
                 value = sum(float(v) for v in values_of_header_rows if v.isdigit())
         elif header_entry["resolution_method"] == "single":
@@ -654,12 +654,11 @@ def handle_derived_evaluation_fields(evaluation, rows, headers):
     setattr(evaluation, "evaluation_type", evaluation_types)
     evaluation.save()
 
-    "Process",  # Evaluation type option
-    "Impact",  # Evaluation type option
-    "Economic",  # Evaluation type option
-    "Other evaluation type (please state)",  # Evaluation type option
-
-    "sample_size_details",  # Taken from sample_size column and all text goes here instead
+    sample_size_values = get_values_from_rows_for_header(rows, derived_fields["sample_size_details"], headers)
+    sample_size_values_text = [sample_size for sample_size in sample_size_values if not sample_size.isdigit()]
+    sample_size_details = ". ".join(s.strip().rstrip(".") for s in sample_size_values_text) + "."
+    setattr(evaluation, "sample_size_details", sample_size_details)
+    evaluation.save()
 
 
 def transform_and_create_from_rows(rows, headers):
