@@ -12,16 +12,16 @@ DATA_DIR = settings.BASE_DIR / "temp-data"
 CHUNK_SIZE = 16 * 1024
 
 
-# Need maps for CSV headers to model property names
+# Ensure all data matching maps are in lower case for lower matches
 
 disallowed_row_values = (
-    "Information not identified within the report",
-    "Information not identified in the report",
-    "Not identified",
+    "information not identified within the report",
+    "information not identified in the report",
+    "not identified",
     "information not easily identified within the report",
-    "Other (please specify)",
-    "Not announced",
-    "N/A",
+    "other (please specify)",
+    "not announced",
+    "n/a",
 )
 
 positive_row_values = (
@@ -570,7 +570,7 @@ def get_values_from_rows_for_header(rows, header, headers):
     for value in values_of_header_rows:
         contains_disallowed = False
         for disallowed in disallowed_row_values:
-            if disallowed in value or value.strip() == "" or value is None:
+            if disallowed in value.lower() or value.strip() == "" or value is None:
                 contains_disallowed = True
                 break
         if not contains_disallowed:
@@ -590,7 +590,7 @@ def handle_simple_field(model, header_entry, values_of_header_rows):
                 value = max(set(values_of_header_rows), key=values_of_header_rows.count)
             else:
                 all_float_values = [float(v) for v in values_of_header_rows if v.isdigit()]
-                value = max(all_float_values) if (all_float_values is not [] and all_float_values is not None) else 0
+                value = max(all_float_values) if all_float_values else 0
         else:
             value = "" if header_entry["data_type"] == "str" else 0
     else:
@@ -603,40 +603,43 @@ def handle_derived_evaluation_fields(evaluation, rows, headers):
     issue_description_row_values = get_values_from_rows_for_header(
         rows, derived_fields["issue_description_option"], headers
     )
-    if issue_description_row_values is not None and issue_description_row_values is not []:
+    if issue_description_row_values:
         setattr(evaluation, "issue_description_option", "YES")
     else:
         setattr(evaluation, "issue_description_option", "NO")
         evaluation.save()
 
     ethics_row_values = get_values_from_rows_for_header(rows, derived_fields["ethics_option"], headers)
-    if ethics_row_values is not None and ethics_row_values is not []:
+    if ethics_row_values:
         setattr(evaluation, "ethics_option", "YES")
     else:
         setattr(evaluation, "ethics_option", "NO")
         evaluation.save()
 
     # "grants_option",  # Evaluation optional page, not there in report
+    setattr(evaluation, "grants_option", "NO")
+    evaluation.save()
+
     evaluation_types = []
     process_evaluation_row_values = get_values_from_rows_for_header(rows, derived_fields["process_evaluation"], headers)
-    process_evaluation_row_values_yes = sum(1 for row_value in process_evaluation_row_values if row_value in positive_row_values)
-    process_evaluation_row_values_no = sum(1 for row_value in process_evaluation_row_values if row_value in negative_row_values)
+    process_evaluation_row_values_yes = sum(1 for row_value in process_evaluation_row_values if row_value.lower() in positive_row_values)
+    process_evaluation_row_values_no = sum(1 for row_value in process_evaluation_row_values if row_value.lower() in negative_row_values)
     if process_evaluation_row_values_no > process_evaluation_row_values_yes:
         evaluation_types.append(choices.EvaluationTypeOptions.PROCESS.value)
 
     impact_evaluation_row_values = get_values_from_rows_for_header(rows, derived_fields["impact_evaluation"], headers)
     impact_evaluation_row_values_yes = sum(
-        1 for row_value in impact_evaluation_row_values if row_value in positive_row_values)
+        1 for row_value in impact_evaluation_row_values if row_value.lower() in positive_row_values)
     impact_evaluation_row_values_no = sum(
-        1 for row_value in impact_evaluation_row_values if row_value in negative_row_values)
+        1 for row_value in impact_evaluation_row_values if row_value.lower() in negative_row_values)
     if impact_evaluation_row_values_no > impact_evaluation_row_values_yes:
         evaluation_types.append(choices.EvaluationTypeOptions.IMPACT.value)
 
     economic_evaluation_row_values = get_values_from_rows_for_header(rows, derived_fields["economic_evaluation"], headers)
     economic_evaluation_row_values_yes = sum(
-        1 for row_value in economic_evaluation_row_values if row_value in positive_row_values)
+        1 for row_value in economic_evaluation_row_values if row_value.lower() in positive_row_values)
     economic_evaluation_row_values_no = sum(
-        1 for row_value in economic_evaluation_row_values if row_value in negative_row_values)
+        1 for row_value in economic_evaluation_row_values if row_value.lower() in negative_row_values)
     if economic_evaluation_row_values_no > economic_evaluation_row_values_yes:
         evaluation_types.append(choices.EvaluationTypeOptions.ECONOMIC.value)
 
@@ -649,6 +652,8 @@ def handle_derived_evaluation_fields(evaluation, rows, headers):
     if other_evaluation_row_values_no > other_evaluation_row_values_yes:
         evaluation_types.append(choices.EvaluationTypeOptions.OTHER.value)
     setattr(evaluation, "evaluation_type", evaluation_types)
+    evaluation.save()
+
     "Process",  # Evaluation type option
     "Impact",  # Evaluation type option
     "Economic",  # Evaluation type option
