@@ -6,7 +6,6 @@ from django.conf import settings
 from django.core.management.base import BaseCommand
 
 from etf.evaluation import choices, enums, models
-from etf.evaluation.pages import get_default_page_statuses
 
 DATA_DIR = settings.BASE_DIR / "temp-data"
 CHUNK_SIZE = 16 * 1024
@@ -22,6 +21,28 @@ disallowed_row_values = (
     "other (please specify)",
     "not announced",
     "n/a",
+    "na",
+    "no information easily identified within the report",
+    "information not included in the report",
+    "information not specified within the report",
+    "information not specifed in report",
+    "information not specified in the report",
+    "not applicable",
+    "not applicabe",
+    "no information on outcomes easily identified within the report",
+    "information notidentified within the report",
+    "no information on outcomes easily identified within the report" "information no identified within the report",
+    "no outcomes identified within the report",
+    "not found",
+    "information no identified within the report",
+    "information not identfied within the report",
+    "information specified in a separate report",
+    "missing - needs to be added",
+    "0",
+    "1",
+    "Not applicablle",
+    "no methodology identified within the report",
+    "not applicablle",
 )
 
 positive_row_values = (
@@ -35,6 +56,113 @@ negative_row_values = (
     "no",
     "false",
 )
+
+
+class AlternateChoice:
+    def __init__(self, label, name):
+        self.label = label
+        self.name = name
+
+
+yes_no_choices = (
+    AlternateChoice(label="y", name=choices.YesNo.YES),
+    AlternateChoice(label="y (aa)", name=choices.YesNo.YES),
+    AlternateChoice(label="yes", name=choices.YesNo.YES),
+    AlternateChoice(label="n", name=choices.YesNo.NO),
+    AlternateChoice(label="no", name=choices.YesNo.NO),
+)
+
+impact_design_name_choices = (
+    AlternateChoice(label="surveys and polling", name=choices.ImpactEvalDesign.SURVEYS_AND_POLLING),
+    AlternateChoice(label="individual interviews", name=choices.ImpactEvalDesign.INDIVIDUAL_INTERVIEWS),
+    AlternateChoice(
+        label="output or performance monitoring", name=choices.ImpactEvalDesign.OUTPUT_OR_PERFORMANCE_MONITORING
+    ),
+    AlternateChoice(label="Randomised Controlled Trial (RCT)", name=choices.ImpactEvalDesign.RCT),
+    AlternateChoice(label="Interviews and group sessions", name=choices.ImpactEvalDesign.FOCUS_GROUPS),
+    AlternateChoice(label="Surveys (ECTs)", name=choices.ImpactEvalDesign.SURVEYS_AND_POLLING),
+    AlternateChoice(
+        label="Output or performance monitoring", name=choices.ImpactEvalDesign.OUTPUT_OR_PERFORMANCE_MONITORING
+    ),
+    AlternateChoice(label="Cluster randomised RCT", name=choices.ImpactEvalDesign.CLUSTER_RCT),
+    AlternateChoice(
+        label="Surveys, focus groups and interviews conducted", name=choices.ImpactEvalDesign.SURVEYS_AND_POLLING
+    ),
+    AlternateChoice(label="Propensity Score Matching", name=choices.ImpactEvalDesign.PROPENSITY_SCORE_MATCHING),
+    AlternateChoice(
+        label="Focus groups or group interviews alongwith individual interviews & case studies",
+        name=choices.ImpactEvalDesign.FOCUS_GROUPS,
+    ),
+    AlternateChoice(label="Difference in Difference", name=choices.ImpactEvalDesign.DIFF_IN_DIFF),
+    AlternateChoice(
+        label="Output or performance review", name=choices.ImpactEvalDesign.OUTPUT_OR_PERFORMANCE_MONITORING
+    ),
+    AlternateChoice(label="Survey and polling", name=choices.ImpactEvalDesign.SURVEYS_AND_POLLING),
+    AlternateChoice(label="Individual interviews", name=choices.ImpactEvalDesign.INDIVIDUAL_INTERVIEWS),
+    AlternateChoice(label="Case studies", name=choices.ImpactEvalDesign.CASE_STUDIES),
+    AlternateChoice(label="Survey respondents (landlords)", name=choices.ImpactEvalDesign.SURVEYS_AND_POLLING),
+    AlternateChoice(label="Simulation model developed", name=choices.ImpactEvalDesign.SIMULATION_MODELLING),
+    AlternateChoice(label="Focus groups or group interviews", name=choices.ImpactEvalDesign.FOCUS_GROUPS),
+    AlternateChoice(label="Outcome letter review", name=choices.ImpactEvalDesign.OUTCOME_HARVESTING),
+    AlternateChoice(label="Semi structured qualitative interviews", name=choices.ImpactEvalDesign.QCA),
+    AlternateChoice(
+        label="Other (Qualitative research)", name=choices.ImpactEvalDesign.QUALITATIVE_OBSERVATIONAL_STUDIES
+    ),
+    AlternateChoice(
+        label="Mix of methods including surveys and group interviews", name=choices.ImpactEvalDesign.SURVEYS_AND_POLLING
+    ),
+    AlternateChoice(
+        label="Telephone interviews (housing advisers)", name=choices.ImpactEvalDesign.INDIVIDUAL_INTERVIEWS
+    ),
+    AlternateChoice(label="Individual interviews", name=choices.ImpactEvalDesign.INDIVIDUAL_INTERVIEWS),
+    AlternateChoice(label="Focus groups, interviews, and surveys", name=choices.ImpactEvalDesign.FOCUS_GROUPS),
+    AlternateChoice(
+        label="Review of data from Adult Tobacco Policy Survey", name=choices.ImpactEvalDesign.SURVEYS_AND_POLLING
+    ),
+    AlternateChoice(label="Consultative/deliberative methods", name=choices.ImpactEvalDesign.CONSULTATIVE_METHODS),
+    AlternateChoice(label="Surveys (senior leaders)", name=choices.ImpactEvalDesign.SURVEYS_AND_POLLING),
+    AlternateChoice(label="Randomised Controlled Trial", name=choices.ImpactEvalDesign.RCT),
+    AlternateChoice(label="Synthetic Control Methods", name=choices.ImpactEvalDesign.SYNTHETIC_CONTROL_METHODS),
+    AlternateChoice(label="interviews", name=choices.ImpactEvalDesign.INDIVIDUAL_INTERVIEWS),
+    AlternateChoice(
+        label="qualitative depth interviews and focus groups",
+        name=choices.ImpactEvalDesign.QUALITATIVE_OBSERVATIONAL_STUDIES,
+    ),
+    AlternateChoice(label="Case Studies", name=choices.ImpactEvalDesign.CASE_STUDIES),
+    AlternateChoice(label="Case studies and interviews", name=choices.ImpactEvalDesign.CASE_STUDIES),
+    AlternateChoice(label="Simulation modelling", name=choices.ImpactEvalDesign.SIMULATION_MODELLING),
+    AlternateChoice(label="Focus group", name=choices.ImpactEvalDesign.FOCUS_GROUPS),
+    AlternateChoice(label="Interviews (landlords)", name=choices.ImpactEvalDesign.INDIVIDUAL_INTERVIEWS),
+    AlternateChoice(label="Process Tracing", name=choices.ImpactEvalDesign.PROCESS_TRACING),
+    AlternateChoice(label="Interview", name=choices.ImpactEvalDesign.INDIVIDUAL_INTERVIEWS),
+    AlternateChoice(
+        label="regression adjusted Difference-in-Difference (DiD)", name=choices.ImpactEvalDesign.DIFF_IN_DIFF
+    ),
+    AlternateChoice(label="Survyes and case study", name=choices.ImpactEvalDesign.SURVEYS_AND_POLLING),
+    AlternateChoice(label="Participant Survey", name=choices.ImpactEvalDesign.SURVEYS_AND_POLLING),
+    AlternateChoice(label="focus groups", name=choices.ImpactEvalDesign.FOCUS_GROUPS),
+    AlternateChoice(label="INTERVIEW", name=choices.ImpactEvalDesign.INDIVIDUAL_INTERVIEWS),
+    AlternateChoice(label="Surveys and polling", name=choices.ImpactEvalDesign.SURVEYS_AND_POLLING),
+    AlternateChoice(label="Surveys and interviews", name=choices.ImpactEvalDesign.SURVEYS_AND_POLLING),
+    AlternateChoice(label="Focus groups (housing advisers)", name=choices.ImpactEvalDesign.FOCUS_GROUPS),
+    AlternateChoice(label="Forcus group", name=choices.ImpactEvalDesign.FOCUS_GROUPS),
+    AlternateChoice(label="Contribution Tracing", name=choices.ImpactEvalDesign.CONTRIBUTION_TRACING),
+    AlternateChoice(label="Surveys", name=choices.ImpactEvalDesign.SURVEYS_AND_POLLING),
+    AlternateChoice(label="Outcome harvesting", name=choices.ImpactEvalDesign.OUTCOME_HARVESTING),
+    AlternateChoice(
+        label="Performance or output monitoring", name=choices.ImpactEvalDesign.OUTPUT_OR_PERFORMANCE_MONITORING
+    ),
+    AlternateChoice(
+        label="Individual interviews along with surveys and review of monitoring data to carry out quantitative modelling approach",
+        name=choices.ImpactEvalDesign.INDIVIDUAL_INTERVIEWS,
+    ),
+    AlternateChoice(
+        label="Simulation modelling: Asset Liability Modelling (ALM)",
+        name=choices.ImpactEvalDesign.SIMULATION_MODELLING,
+    ),
+    AlternateChoice(label="Other (RCT - Quasi-Experimentl approaches)", name=choices.ImpactEvalDesign.RCT),
+)
+
 
 evaluation_headers = {
     "Evaluation title": {"field_name": "title", "resolution_method": "single", "data_type": "str"},
@@ -67,7 +195,7 @@ evaluation_headers = {
         "data_type": "str",
     },
     "Eligibility criteria": {"field_name": "eligibility_criteria", "resolution_method": "combine", "data_type": "str"},
-    "Total number of people (or other unit) included in the evaluation": {  # TODO: Figure out adding all text from this field into sample_size_details
+    "Total number of people (or other unit) included in the evaluation": {
         "field_name": "sample_size",
         "resolution_method": "combine",
         "data_type": "int",
@@ -86,7 +214,7 @@ evaluation_headers = {
     "Impact - Design": {
         "field_name": "impact_design_name",
         "resolution_method": "multiple_choice",
-        "data_type": choices.ImpactEvalDesign,
+        "data_type": impact_design_name_choices,
     },
     "Impact - Justification for design": {
         "field_name": "impact_design_justification",
@@ -198,7 +326,7 @@ evaluation_headers = {
     "Impact - Fidelity of report": {
         "field_name": "impact_fidelity",
         "resolution_method": "choice",
-        "data_type": choices.YesNo,
+        "data_type": yes_no_choices,
     },
     "Impact - Description of analysis": {
         "field_name": "impact_description_planned_analysis",
@@ -230,7 +358,7 @@ evaluation_headers = {
     "Ethics committee approval": {
         "field_name": "ethics_committee_approval",
         "resolution_method": "choice",
-        "data_type": choices.YesNo,
+        "data_type": yes_no_choices,
     },
     "Ethics committee details": {
         "field_name": "ethics_committee_details",
@@ -471,12 +599,10 @@ unique_field_headers = (
     "Time point of intesest (Year)",  # Timepoint(s) of interest, intended typo
 )
 
-default_fields = {"visibility": "DRAFT", "page_statuses": get_default_page_statuses()}
-
 derived_fields = {
     "issue_description_option": "Issue to be addressed",  # Evaluation optional page
     "ethics_option": "Ethics committee approval",  # Evaluation optional page
-    # "grants_option",  # Evaluation optional page, not present in CSV yet
+    # "grants_option", Evaluation optional page, not present in CSV yet
     "process_evaluation": "Process",  # Evaluation type option
     "impact_evaluation": "Impact",  # Evaluation type option
     "economic_evaluation": "Economic",  # Evaluation type option
@@ -560,12 +686,9 @@ def get_evaluation_rows_for_id(unique_id, rows, headers):
 
 
 def get_values_from_rows_for_header(rows, header, headers):
-    values_of_header_rows = [
-        row[headers.index(header)]
-        for row in rows
-    ]
+    values_of_header_rows = [row[headers.index(header)] for row in rows]
 
-    # Removed empty and unwanted values
+    # Removed empty, unwanted and duplicate values
     allowed_values = []
     for value in values_of_header_rows:
         contains_disallowed = False
@@ -575,7 +698,7 @@ def get_values_from_rows_for_header(rows, header, headers):
                 break
         if not contains_disallowed:
             allowed_values.append(value)
-    return allowed_values
+    return list(set(allowed_values))
 
 
 def handle_simple_field(model, header_entry, values_of_header_rows):
@@ -616,41 +739,57 @@ def handle_derived_evaluation_fields(evaluation, rows, headers):
         setattr(evaluation, "ethics_option", "NO")
         evaluation.save()
 
-    # "grants_option",  # Evaluation optional page, not there in report
+    # "grants_option", Evaluation optional page, not there in CSV
     setattr(evaluation, "grants_option", "NO")
     evaluation.save()
 
     evaluation_types = []
     process_evaluation_row_values = get_values_from_rows_for_header(rows, derived_fields["process_evaluation"], headers)
-    process_evaluation_row_values_yes = sum(1 for row_value in process_evaluation_row_values if row_value.lower() in positive_row_values)
-    process_evaluation_row_values_no = sum(1 for row_value in process_evaluation_row_values if row_value.lower() in negative_row_values)
+    process_evaluation_row_values_yes = sum(
+        1 for row_value in process_evaluation_row_values if row_value.lower() in positive_row_values
+    )
+    process_evaluation_row_values_no = sum(
+        1 for row_value in process_evaluation_row_values if row_value.lower() in negative_row_values
+    )
     if process_evaluation_row_values_no > process_evaluation_row_values_yes:
         evaluation_types.append(choices.EvaluationTypeOptions.PROCESS.value)
 
     impact_evaluation_row_values = get_values_from_rows_for_header(rows, derived_fields["impact_evaluation"], headers)
     impact_evaluation_row_values_yes = sum(
-        1 for row_value in impact_evaluation_row_values if row_value.lower() in positive_row_values)
+        1 for row_value in impact_evaluation_row_values if row_value.lower() in positive_row_values
+    )
     impact_evaluation_row_values_no = sum(
-        1 for row_value in impact_evaluation_row_values if row_value.lower() in negative_row_values)
+        1 for row_value in impact_evaluation_row_values if row_value.lower() in negative_row_values
+    )
     if impact_evaluation_row_values_no > impact_evaluation_row_values_yes:
         evaluation_types.append(choices.EvaluationTypeOptions.IMPACT.value)
 
-    economic_evaluation_row_values = get_values_from_rows_for_header(rows, derived_fields["economic_evaluation"], headers)
+    economic_evaluation_row_values = get_values_from_rows_for_header(
+        rows, derived_fields["economic_evaluation"], headers
+    )
     economic_evaluation_row_values_yes = sum(
-        1 for row_value in economic_evaluation_row_values if row_value.lower() in positive_row_values)
+        1 for row_value in economic_evaluation_row_values if row_value.lower() in positive_row_values
+    )
     economic_evaluation_row_values_no = sum(
-        1 for row_value in economic_evaluation_row_values if row_value.lower() in negative_row_values)
+        1 for row_value in economic_evaluation_row_values if row_value.lower() in negative_row_values
+    )
     if economic_evaluation_row_values_no > economic_evaluation_row_values_yes:
         evaluation_types.append(choices.EvaluationTypeOptions.ECONOMIC.value)
 
-    other_evaluation_row_values = get_values_from_rows_for_header(rows, derived_fields["other_evaluation"],
-                                                                     headers)
+    other_evaluation_row_values = get_values_from_rows_for_header(rows, derived_fields["other_evaluation"], headers)
     other_evaluation_row_values_yes = sum(
-        1 for row_value in other_evaluation_row_values if row_value.lower() in positive_row_values)
+        1 for row_value in other_evaluation_row_values if row_value.lower() in positive_row_values
+    )
     other_evaluation_row_values_no = sum(
-        1 for row_value in other_evaluation_row_values if row_value.lower() in negative_row_values)
-    if other_evaluation_row_values_no > other_evaluation_row_values_yes:
+        1 for row_value in other_evaluation_row_values if row_value.lower() in negative_row_values
+    )
+    other_evaluation_row_values = [row_value for row_value in other_evaluation_row_values if (row_value.lower() not in positive_row_values and row_value.lower() not in negative_row_values)]
+    if other_evaluation_row_values_yes > other_evaluation_row_values_no:
         evaluation_types.append(choices.EvaluationTypeOptions.OTHER.value)
+        if other_evaluation_row_values:
+            setattr(evaluation, "evaluation_type_other", other_evaluation_row_values)
+        else:
+            setattr(evaluation, "evaluation_type_other", "No information provided.")
     setattr(evaluation, "evaluation_type", evaluation_types)
     evaluation.save()
 
@@ -661,8 +800,50 @@ def handle_derived_evaluation_fields(evaluation, rows, headers):
     evaluation.save()
 
 
+def handle_single_choice_field(model, header_entry, values_of_header_rows):
+    if values_of_header_rows:
+        most_chosen_choice = max(set(values_of_header_rows), key=values_of_header_rows.count)
+        most_chosen_choice = most_chosen_choice.rstrip(".")
+        item_choices = header_entry["data_type"]
+        selected_choice = [choice.name for choice in item_choices if choice.label.lower() == most_chosen_choice.lower()]
+        if selected_choice:
+            value = selected_choice[0]
+            setattr(model, header_entry["field_name"], value)
+        else:
+            value = "OTHER"
+            setattr(model, header_entry["field_name"], value)
+            other_value = ". ".join(s.strip().rstrip(".") for s in values_of_header_rows) + "."
+            setattr(model, f"{header_entry['field_name']}_other", other_value)
+        model.save()
+
+
+def handle_multiple_choice_field(model, header_entry, values_of_header_rows):
+    if values_of_header_rows:
+        item_choices = header_entry["data_type"]
+        lower_values_of_header_rows = [row_value.lower().strip().rstrip(".") for row_value in values_of_header_rows]
+        present_choices = [
+            choice.label for choice in item_choices if choice.label.lower() in lower_values_of_header_rows
+        ]
+        not_present_choices = [
+            lower_value_of_header_rows
+            for lower_value_of_header_rows in lower_values_of_header_rows
+            if lower_value_of_header_rows not in item_choices
+        ]
+        if present_choices:
+            setattr(model, header_entry["field_name"], present_choices)
+            model.save()
+        if not_present_choices:
+            if "OTHER" not in present_choices:
+                present_choices.append("OTHER")
+                setattr(model, header_entry["field_name"], present_choices)
+            other_value = ". ".join(s.strip().rstrip(".") for s in not_present_choices) + "."
+            setattr(model, f"{header_entry['field_name']}_other", other_value)
+            model.save()
+
+
 def transform_and_create_from_rows(rows, headers):
     evaluation = models.Evaluation.objects.create()
+    evaluation.visibility = "PUBLIC"
     evaluation.save()
 
     # Check header type from dict
@@ -680,6 +861,10 @@ def transform_and_create_from_rows(rows, headers):
                 "int",
             ):
                 handle_simple_field(evaluation, header_entry, values_of_header_rows)
+            elif header_entry["resolution_method"] == "choice":
+                handle_single_choice_field(evaluation, header_entry, values_of_header_rows)
+            elif header_entry["resolution_method"] == "multiple_choice":
+                handle_multiple_choice_field(evaluation, header_entry, values_of_header_rows)
 
     # Derived evaluation headers
     handle_derived_evaluation_fields(evaluation, rows, headers)
@@ -687,10 +872,41 @@ def transform_and_create_from_rows(rows, headers):
     return rows
 
 
+single_choice_fields = {
+    "Impact - Analysis framework": choices.ImpactFramework,  # Most don't match, going to have to match with OTHER mostly
+    "Impact - Analysis basis": choices.ImpactAnalysisBasis,  # Matches exactly
+    "Impact - Primary effect size measure type": choices.ImpactMeasureType,  # Only a small amount match, all others should go into "Other"
+    "Impact - Primary effect size measure interval": choices.ImpactMeasureInterval,  # Some match, some don't, add extras to "Other"
+    "Impact - Interpretation type": choices.ImpactInterpretationType,  # Some match, others don't so add to "other", should we add "None" to accepted values
+    "Impact - Fidelity of report": choices.YesNo,  # Need a new match for yes/no, options are Y, N and Y (AA), ignore extras
+    "Ethics committee approval": choices.YesNo,  # Need a new match for yes/no, options are Y, N and Y (AA), ignore extras
+    "Primary or secondary outcome": choices.OutcomeType,  # Some match, ignore those that don't
+    "Direct or surrogate": choices.OutcomeMeasure,  # Some match, ignore those that don't
+    "Measure type": choices.MeasureType,  # Matches types for some (do lower comparison anyway) Other is implied by not matching any
+    "Other outcomes - Outcome measure type": choices.MeasureType,  # Matches types for some (do lower comparison anyway) Other is implied by not matching any
+    "Conformity": choices.FullNoPartial,  # Matches values (do lower comparison anyway)
+}
+
+
+multi_choice_fields = {
+    # "topics": choices.Topic,  # Not included in CSV
+    # "evaluation type": choices.EvaluationTypeOptions,  # Done with derived fields
+    "Impact - Design": choices.ImpactEvalDesign,  # impact design name
+    # "document types": choices.DocumentType,  # Documents not included in csv,
+    # "aspect name": choices.ProcessEvaluationAspects,  # in ProcessEvaluationDesignAspectsSchema, not in CSV
+    # "aspects_measured": choices.ProcessEvaluationAspects,  # in ProcessEvaluationMethodSchema, not in CSV
+}
+
+
 def import_and_upload_evaluations(url):
     filename = save_url_to_data_dir(url)
     headers = get_sheet_headers(filename)
     rows = get_data_rows(filename)
+    # for choice_field in multi_choice_fields.keys():
+    #     values = get_values_from_rows_for_header(rows, choice_field, headers)
+    #     for value in values:
+    #         print(value)
+    #         print("\n")
     unique_ids = get_evaluation_ids(rows, headers)
     for unique_id in unique_ids[0:2]:
         rows_for_id = get_evaluation_rows_for_id(unique_id, rows, headers)
