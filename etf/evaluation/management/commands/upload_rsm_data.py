@@ -783,7 +783,11 @@ def handle_derived_evaluation_fields(evaluation, rows, headers):
     other_evaluation_row_values_no = sum(
         1 for row_value in other_evaluation_row_values if row_value.lower() in negative_row_values
     )
-    other_evaluation_row_values = [row_value for row_value in other_evaluation_row_values if (row_value.lower() not in positive_row_values and row_value.lower() not in negative_row_values)]
+    other_evaluation_row_values = [
+        row_value
+        for row_value in other_evaluation_row_values
+        if (row_value.lower() not in positive_row_values and row_value.lower() not in negative_row_values)
+    ]
     if other_evaluation_row_values_yes > other_evaluation_row_values_no:
         evaluation_types.append(choices.EvaluationTypeOptions.OTHER.value)
         if other_evaluation_row_values:
