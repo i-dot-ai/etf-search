@@ -1165,7 +1165,7 @@ org_tuples = (
     ("security-vetting-appeals-panel", "Security Vetting Appeals Panel (SVAP)"),
     ("sellafield-ltd", "Sellafield Ltd"),
     ("senior-courts-costs-office", "Senior Courts Costs Office"),
-    ("review-body-on-senior-salaries", "Senior Salaries Review Body  (SSRB)"),
+    ("review-body-on-senior-salaries", "Senior Salaries Review Body (SSRB)"),
     ("sentence-review-commissioners", "Sentence Review Commissioners"),
     ("the-sentencing-council-for-england-and-wales", "Sentencing Council for England and Wales (SC)"),
     ("serious-fraud-office", "Serious Fraud Office (SFO)"),
