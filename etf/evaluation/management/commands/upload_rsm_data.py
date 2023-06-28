@@ -1149,7 +1149,7 @@ def handle_multiple_choice_field(model, header_entry, values_of_header_rows):
         item_choices = header_entry["data_type"]
         lower_values_of_header_rows = [row_value.lower().strip().rstrip(".") for row_value in values_of_header_rows]
         present_choices = [
-            choice.label for choice in item_choices if choice.label.lower() in lower_values_of_header_rows
+            choice.name for choice in item_choices if choice.label.lower() in lower_values_of_header_rows
         ]
         not_present_choices = [
             lower_value_of_header_rows
@@ -1329,6 +1329,11 @@ def import_and_upload_evaluations(url):
     filename = save_url_to_data_dir(url)
     headers = get_sheet_headers(filename)
     rows = get_data_rows(filename)
+    # for org in organisation_choices:
+    #     for org_choice in enums.org_tuples:
+    #         if org_choice[0] == org.name:
+    #             print(f"AlternateChoice(label=\"{org.label}\", name=\"{org_choice[1]}\"),")
+                # print("\n")
     # for choice_field in ["Government departments"]:
     #     values = get_values_from_rows_for_header(rows, choice_field, headers)
     #     print(values)
