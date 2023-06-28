@@ -12,7 +12,6 @@ CHUNK_SIZE = 16 * 1024
 
 
 # Ensure all data matching maps are in lower case for lower matches
-
 disallowed_row_values = (
     "information not identified within the report",
     "information not identified in the report",
@@ -65,102 +64,103 @@ class AlternateChoice:
 
 
 yes_no_choices = (
-    AlternateChoice(label="y", name=choices.YesNo.YES),
-    AlternateChoice(label="y (aa)", name=choices.YesNo.YES),
-    AlternateChoice(label="yes", name=choices.YesNo.YES),
-    AlternateChoice(label="n", name=choices.YesNo.NO),
-    AlternateChoice(label="no", name=choices.YesNo.NO),
+    AlternateChoice(label="y", name=choices.YesNo.YES.name),
+    AlternateChoice(label="y (aa)", name=choices.YesNo.YES.name),
+    AlternateChoice(label="yes", name=choices.YesNo.YES.name),
+    AlternateChoice(label="n", name=choices.YesNo.NO.name),
+    AlternateChoice(label="no", name=choices.YesNo.NO.name),
 )
 
 impact_design_name_choices = (
-    AlternateChoice(label="surveys and polling", name=choices.ImpactEvalDesign.SURVEYS_AND_POLLING),
-    AlternateChoice(label="individual interviews", name=choices.ImpactEvalDesign.INDIVIDUAL_INTERVIEWS),
+    AlternateChoice(label="surveys and polling", name=choices.ImpactEvalDesign.SURVEYS_AND_POLLING.name),
+    AlternateChoice(label="individual interviews", name=choices.ImpactEvalDesign.INDIVIDUAL_INTERVIEWS.name),
     AlternateChoice(
-        label="output or performance monitoring", name=choices.ImpactEvalDesign.OUTPUT_OR_PERFORMANCE_MONITORING
+        label="output or performance monitoring", name=choices.ImpactEvalDesign.OUTPUT_OR_PERFORMANCE_MONITORING.name
     ),
-    AlternateChoice(label="Randomised Controlled Trial (RCT)", name=choices.ImpactEvalDesign.RCT),
-    AlternateChoice(label="Interviews and group sessions", name=choices.ImpactEvalDesign.FOCUS_GROUPS),
-    AlternateChoice(label="Surveys (ECTs)", name=choices.ImpactEvalDesign.SURVEYS_AND_POLLING),
+    AlternateChoice(label="Randomised Controlled Trial (RCT)", name=choices.ImpactEvalDesign.RCT.name),
+    AlternateChoice(label="Interviews and group sessions", name=choices.ImpactEvalDesign.FOCUS_GROUPS.name),
+    AlternateChoice(label="Surveys (ECTs)", name=choices.ImpactEvalDesign.SURVEYS_AND_POLLING.name),
     AlternateChoice(
-        label="Output or performance monitoring", name=choices.ImpactEvalDesign.OUTPUT_OR_PERFORMANCE_MONITORING
+        label="Output or performance monitoring", name=choices.ImpactEvalDesign.OUTPUT_OR_PERFORMANCE_MONITORING.name
     ),
-    AlternateChoice(label="Cluster randomised RCT", name=choices.ImpactEvalDesign.CLUSTER_RCT),
+    AlternateChoice(label="Cluster randomised RCT", name=choices.ImpactEvalDesign.CLUSTER_RCT.name),
     AlternateChoice(
-        label="Surveys, focus groups and interviews conducted", name=choices.ImpactEvalDesign.SURVEYS_AND_POLLING
+        label="Surveys, focus groups and interviews conducted", name=choices.ImpactEvalDesign.SURVEYS_AND_POLLING.name
     ),
-    AlternateChoice(label="Propensity Score Matching", name=choices.ImpactEvalDesign.PROPENSITY_SCORE_MATCHING),
+    AlternateChoice(label="Propensity Score Matching", name=choices.ImpactEvalDesign.PROPENSITY_SCORE_MATCHING.name),
     AlternateChoice(
         label="Focus groups or group interviews alongwith individual interviews & case studies",
-        name=choices.ImpactEvalDesign.FOCUS_GROUPS,
+        name=choices.ImpactEvalDesign.FOCUS_GROUPS.name,
     ),
-    AlternateChoice(label="Difference in Difference", name=choices.ImpactEvalDesign.DIFF_IN_DIFF),
+    AlternateChoice(label="Difference in Difference", name=choices.ImpactEvalDesign.DIFF_IN_DIFF.name),
     AlternateChoice(
-        label="Output or performance review", name=choices.ImpactEvalDesign.OUTPUT_OR_PERFORMANCE_MONITORING
+        label="Output or performance review", name=choices.ImpactEvalDesign.OUTPUT_OR_PERFORMANCE_MONITORING.name
     ),
-    AlternateChoice(label="Survey and polling", name=choices.ImpactEvalDesign.SURVEYS_AND_POLLING),
-    AlternateChoice(label="Individual interviews", name=choices.ImpactEvalDesign.INDIVIDUAL_INTERVIEWS),
-    AlternateChoice(label="Case studies", name=choices.ImpactEvalDesign.CASE_STUDIES),
-    AlternateChoice(label="Survey respondents (landlords)", name=choices.ImpactEvalDesign.SURVEYS_AND_POLLING),
-    AlternateChoice(label="Simulation model developed", name=choices.ImpactEvalDesign.SIMULATION_MODELLING),
-    AlternateChoice(label="Focus groups or group interviews", name=choices.ImpactEvalDesign.FOCUS_GROUPS),
-    AlternateChoice(label="Outcome letter review", name=choices.ImpactEvalDesign.OUTCOME_HARVESTING),
-    AlternateChoice(label="Semi structured qualitative interviews", name=choices.ImpactEvalDesign.QCA),
+    AlternateChoice(label="Survey and polling", name=choices.ImpactEvalDesign.SURVEYS_AND_POLLING.name),
+    AlternateChoice(label="Individual interviews", name=choices.ImpactEvalDesign.INDIVIDUAL_INTERVIEWS.name),
+    AlternateChoice(label="Case studies", name=choices.ImpactEvalDesign.CASE_STUDIES.name),
+    AlternateChoice(label="Survey respondents (landlords)", name=choices.ImpactEvalDesign.SURVEYS_AND_POLLING.name),
+    AlternateChoice(label="Simulation model developed", name=choices.ImpactEvalDesign.SIMULATION_MODELLING.name),
+    AlternateChoice(label="Focus groups or group interviews", name=choices.ImpactEvalDesign.FOCUS_GROUPS.name),
+    AlternateChoice(label="Outcome letter review", name=choices.ImpactEvalDesign.OUTCOME_HARVESTING.name),
+    AlternateChoice(label="Semi structured qualitative interviews", name=choices.ImpactEvalDesign.QCA.name),
     AlternateChoice(
-        label="Other (Qualitative research)", name=choices.ImpactEvalDesign.QUALITATIVE_OBSERVATIONAL_STUDIES
-    ),
-    AlternateChoice(
-        label="Mix of methods including surveys and group interviews", name=choices.ImpactEvalDesign.SURVEYS_AND_POLLING
+        label="Other (Qualitative research)", name=choices.ImpactEvalDesign.QUALITATIVE_OBSERVATIONAL_STUDIES.name
     ),
     AlternateChoice(
-        label="Telephone interviews (housing advisers)", name=choices.ImpactEvalDesign.INDIVIDUAL_INTERVIEWS
+        label="Mix of methods including surveys and group interviews",
+        name=choices.ImpactEvalDesign.SURVEYS_AND_POLLING.name,
     ),
-    AlternateChoice(label="Individual interviews", name=choices.ImpactEvalDesign.INDIVIDUAL_INTERVIEWS),
-    AlternateChoice(label="Focus groups, interviews, and surveys", name=choices.ImpactEvalDesign.FOCUS_GROUPS),
     AlternateChoice(
-        label="Review of data from Adult Tobacco Policy Survey", name=choices.ImpactEvalDesign.SURVEYS_AND_POLLING
+        label="Telephone interviews (housing advisers)", name=choices.ImpactEvalDesign.INDIVIDUAL_INTERVIEWS.name
     ),
-    AlternateChoice(label="Consultative/deliberative methods", name=choices.ImpactEvalDesign.CONSULTATIVE_METHODS),
-    AlternateChoice(label="Surveys (senior leaders)", name=choices.ImpactEvalDesign.SURVEYS_AND_POLLING),
-    AlternateChoice(label="Randomised Controlled Trial", name=choices.ImpactEvalDesign.RCT),
-    AlternateChoice(label="Synthetic Control Methods", name=choices.ImpactEvalDesign.SYNTHETIC_CONTROL_METHODS),
-    AlternateChoice(label="interviews", name=choices.ImpactEvalDesign.INDIVIDUAL_INTERVIEWS),
+    AlternateChoice(label="Individual interviews", name=choices.ImpactEvalDesign.INDIVIDUAL_INTERVIEWS.name),
+    AlternateChoice(label="Focus groups, interviews, and surveys", name=choices.ImpactEvalDesign.FOCUS_GROUPS.name),
+    AlternateChoice(
+        label="Review of data from Adult Tobacco Policy Survey", name=choices.ImpactEvalDesign.SURVEYS_AND_POLLING.name
+    ),
+    AlternateChoice(label="Consultative/deliberative methods", name=choices.ImpactEvalDesign.CONSULTATIVE_METHODS.name),
+    AlternateChoice(label="Surveys (senior leaders)", name=choices.ImpactEvalDesign.SURVEYS_AND_POLLING.name),
+    AlternateChoice(label="Randomised Controlled Trial", name=choices.ImpactEvalDesign.RCT.name),
+    AlternateChoice(label="Synthetic Control Methods", name=choices.ImpactEvalDesign.SYNTHETIC_CONTROL_METHODS.name),
+    AlternateChoice(label="interviews", name=choices.ImpactEvalDesign.INDIVIDUAL_INTERVIEWS.name),
     AlternateChoice(
         label="qualitative depth interviews and focus groups",
-        name=choices.ImpactEvalDesign.QUALITATIVE_OBSERVATIONAL_STUDIES,
+        name=choices.ImpactEvalDesign.QUALITATIVE_OBSERVATIONAL_STUDIES.name,
     ),
-    AlternateChoice(label="Case Studies", name=choices.ImpactEvalDesign.CASE_STUDIES),
-    AlternateChoice(label="Case studies and interviews", name=choices.ImpactEvalDesign.CASE_STUDIES),
-    AlternateChoice(label="Simulation modelling", name=choices.ImpactEvalDesign.SIMULATION_MODELLING),
-    AlternateChoice(label="Focus group", name=choices.ImpactEvalDesign.FOCUS_GROUPS),
-    AlternateChoice(label="Interviews (landlords)", name=choices.ImpactEvalDesign.INDIVIDUAL_INTERVIEWS),
-    AlternateChoice(label="Process Tracing", name=choices.ImpactEvalDesign.PROCESS_TRACING),
-    AlternateChoice(label="Interview", name=choices.ImpactEvalDesign.INDIVIDUAL_INTERVIEWS),
+    AlternateChoice(label="Case Studies", name=choices.ImpactEvalDesign.CASE_STUDIES.name),
+    AlternateChoice(label="Case studies and interviews", name=choices.ImpactEvalDesign.CASE_STUDIES.name),
+    AlternateChoice(label="Simulation modelling", name=choices.ImpactEvalDesign.SIMULATION_MODELLING.name),
+    AlternateChoice(label="Focus group", name=choices.ImpactEvalDesign.FOCUS_GROUPS.name),
+    AlternateChoice(label="Interviews (landlords)", name=choices.ImpactEvalDesign.INDIVIDUAL_INTERVIEWS.name),
+    AlternateChoice(label="Process Tracing", name=choices.ImpactEvalDesign.PROCESS_TRACING.name),
+    AlternateChoice(label="Interview", name=choices.ImpactEvalDesign.INDIVIDUAL_INTERVIEWS.name),
     AlternateChoice(
-        label="regression adjusted Difference-in-Difference (DiD)", name=choices.ImpactEvalDesign.DIFF_IN_DIFF
+        label="regression adjusted Difference-in-Difference (DiD)", name=choices.ImpactEvalDesign.DIFF_IN_DIFF.name
     ),
-    AlternateChoice(label="Survyes and case study", name=choices.ImpactEvalDesign.SURVEYS_AND_POLLING),
-    AlternateChoice(label="Participant Survey", name=choices.ImpactEvalDesign.SURVEYS_AND_POLLING),
-    AlternateChoice(label="focus groups", name=choices.ImpactEvalDesign.FOCUS_GROUPS),
-    AlternateChoice(label="INTERVIEW", name=choices.ImpactEvalDesign.INDIVIDUAL_INTERVIEWS),
-    AlternateChoice(label="Surveys and polling", name=choices.ImpactEvalDesign.SURVEYS_AND_POLLING),
-    AlternateChoice(label="Surveys and interviews", name=choices.ImpactEvalDesign.SURVEYS_AND_POLLING),
-    AlternateChoice(label="Focus groups (housing advisers)", name=choices.ImpactEvalDesign.FOCUS_GROUPS),
-    AlternateChoice(label="Forcus group", name=choices.ImpactEvalDesign.FOCUS_GROUPS),
-    AlternateChoice(label="Contribution Tracing", name=choices.ImpactEvalDesign.CONTRIBUTION_TRACING),
-    AlternateChoice(label="Surveys", name=choices.ImpactEvalDesign.SURVEYS_AND_POLLING),
-    AlternateChoice(label="Outcome harvesting", name=choices.ImpactEvalDesign.OUTCOME_HARVESTING),
+    AlternateChoice(label="Survyes and case study", name=choices.ImpactEvalDesign.SURVEYS_AND_POLLING.name),
+    AlternateChoice(label="Participant Survey", name=choices.ImpactEvalDesign.SURVEYS_AND_POLLING.name),
+    AlternateChoice(label="focus groups", name=choices.ImpactEvalDesign.FOCUS_GROUPS.name),
+    AlternateChoice(label="INTERVIEW", name=choices.ImpactEvalDesign.INDIVIDUAL_INTERVIEWS.name),
+    AlternateChoice(label="Surveys and polling", name=choices.ImpactEvalDesign.SURVEYS_AND_POLLING.name),
+    AlternateChoice(label="Surveys and interviews", name=choices.ImpactEvalDesign.SURVEYS_AND_POLLING.name),
+    AlternateChoice(label="Focus groups (housing advisers)", name=choices.ImpactEvalDesign.FOCUS_GROUPS.name),
+    AlternateChoice(label="Forcus group", name=choices.ImpactEvalDesign.FOCUS_GROUPS.name),
+    AlternateChoice(label="Contribution Tracing", name=choices.ImpactEvalDesign.CONTRIBUTION_TRACING.name),
+    AlternateChoice(label="Surveys", name=choices.ImpactEvalDesign.SURVEYS_AND_POLLING.name),
+    AlternateChoice(label="Outcome harvesting", name=choices.ImpactEvalDesign.OUTCOME_HARVESTING.name),
     AlternateChoice(
-        label="Performance or output monitoring", name=choices.ImpactEvalDesign.OUTPUT_OR_PERFORMANCE_MONITORING
+        label="Performance or output monitoring", name=choices.ImpactEvalDesign.OUTPUT_OR_PERFORMANCE_MONITORING.name
     ),
     AlternateChoice(
         label="Individual interviews along with surveys and review of monitoring data to carry out quantitative modelling approach",
-        name=choices.ImpactEvalDesign.INDIVIDUAL_INTERVIEWS,
+        name=choices.ImpactEvalDesign.INDIVIDUAL_INTERVIEWS.name,
     ),
     AlternateChoice(
         label="Simulation modelling: Asset Liability Modelling (ALM)",
-        name=choices.ImpactEvalDesign.SIMULATION_MODELLING,
+        name=choices.ImpactEvalDesign.SIMULATION_MODELLING.name,
     ),
-    AlternateChoice(label="Other (RCT - Quasi-Experimentl approaches)", name=choices.ImpactEvalDesign.RCT),
+    AlternateChoice(label="Other (RCT - Quasi-Experimentl approaches)", name=choices.ImpactEvalDesign.RCT.name),
 )
 
 
@@ -490,13 +490,22 @@ other_measure_headers = {
 grant_headers = {}
 
 # Links
-links_headers = {
-    "Links to associated docments": {
-        "field_name": "link_or_identifier",
-        "resolution_method": "single",
-        "data_type": "str",
+links_headers = [
+    {
+        "gov_uk_link": {
+            "field_name": "name_of_service",
+            "resolution_method": "single",
+            "data_type": "str",
+        },
     },
-}
+    {
+        "gov_uk_link": {
+            "field_name": "link_or_identifier",
+            "resolution_method": "single",
+            "data_type": "str",
+        },
+    },
+]
 
 # Interventions
 intervention_headers = {
@@ -581,13 +590,21 @@ evaluation_cost_headers = {
 
 # Processes and standards
 processes_and_standards_headers = {
-    "Name of standard or process": "name",  # Name of standard of process
+    "Name of standard or process": {
+        "field_name": "name",
+        "resolution_method": "combine",
+        "data_type": "str",
+    },
     "Conformity": {
         "field_name": "conformity",
         "resolution_method": "choice",
         "data_type": choices.FullNoPartial,
     },
-    "Process and standards - Description": "description",  # Description of standard or process
+    "Process and standards - Description": {
+        "field_name": "description",
+        "resolution_method": "combine",
+        "data_type": "str",
+    },
 }
 
 unique_field_headers = (
@@ -611,13 +628,13 @@ derived_fields = {
 }
 
 
-# TODO: List contains all relevant headers
+# Links have been done differently because the dictionary key is duplicated
 all_headers = (
     list(key for key in evaluation_headers.keys())
     + list(key for key in outcome_measure_headers.keys())
     + list(key for key in other_measure_headers.keys())
     + list(key for key in grant_headers.keys())
-    + list(key for key in links_headers.keys())
+    + [list(entry.keys())[0] for entry in links_headers]
     + list(key for key in intervention_headers.keys())
     + list(key for key in event_date_headers.keys())
     + list(key for key in evaluation_cost_headers.keys())
@@ -637,6 +654,14 @@ class Command(BaseCommand):
 
 
 def save_url_to_data_dir(url):
+    """
+    Downloads the file to the data directory
+    Args:
+        url: The url given in the command to download the CSV from
+
+    Returns:
+        A filepath that points to the downloaded file
+    """
     filename = pathlib.Path(url).stem
     filepath = DATA_DIR / "".join((filename, pathlib.Path(url).suffix))
     if not filepath.exists():
@@ -652,6 +677,14 @@ def save_url_to_data_dir(url):
 
 
 def get_sheet_headers(filename):
+    """
+    Gets the headers from the given file
+    Args:
+        filename: The given filename to read from
+
+    Returns:
+        A list of headers from the given CSV
+    """
     with open(filename, "r") as file:
         reader = csv.reader(file)
         headers = next(reader)
@@ -660,6 +693,15 @@ def get_sheet_headers(filename):
 
 
 def get_evaluation_ids(data, headers):
+    """
+    Gets the unique and sorted id's of evaluations in the data
+    Args:
+        data: The data to get the id's from
+        headers: The list of headers to find the Evaluation ID in
+
+    Returns:
+        A sorted list of unique id's relating to evaluations
+    """
     unique_ids = set()
     column_index = headers.index("Evaluation ID")
     for row in data:
@@ -669,7 +711,34 @@ def get_evaluation_ids(data, headers):
     return sorted(unique_ids)
 
 
+def get_evaluation_report_ids(data, headers):
+    """
+    Gets the unique and sorted id's of reports in a given evaluation
+    Args:
+        data: The data to get the id's from
+        headers: The list of headers to find the Report ID in
+
+    Returns:
+        A sorted list of unique id's relating to reports of an evaluation
+    """
+    unique_ids = set()
+    column_index = headers.index("Report ID")
+    for row in data:
+        id_value = row[column_index]
+        if id_value:
+            unique_ids.add(id_value)
+    return sorted(unique_ids)
+
+
 def get_data_rows(filename):
+    """
+    Takes in a filename and returns the rows of that CSV
+    Args:
+        filename: The filename to take rows from
+
+    Returns:
+        A list of rows that contain all the data of the given CSV
+    """
     data = []
     with open(filename, "r") as file:
         reader = csv.reader(file)
@@ -680,20 +749,45 @@ def get_data_rows(filename):
 
 
 def get_evaluation_rows_for_id(unique_id, rows, headers):
+    """
+    Gets the rows of data that relate to the given evaluation_id
+    Args:
+        unique_id: The evaluation to get rows for
+        rows: All rows to take from
+        headers: A list of headers to find the evaluation_id in
+
+    Returns:
+        A list of rows that match the given evaluation_id
+    """
     column_index = headers.index("Evaluation ID")
     matching_rows = [row for row in rows if row[column_index] == unique_id]
     return matching_rows
 
 
-def get_values_from_rows_for_header(rows, header, headers):
-    values_of_header_rows = [row[headers.index(header)] for row in rows]
+def get_values_from_rows_for_header(rows, header, headers, report_id=None):
+    """
+    Gets all the values related to the given header, if a report_id is provided then only rows for that report are given. This is used to related items such as interventions
+    Args:
+        rows: The rows that relate to the evaluation record
+        header: The required header
+        headers: The headers from the CSV
+        report_id: (optional) The report_id to get rows for
 
-    # Removed empty, unwanted and duplicate values
+    Returns:
+        A list of allowed values for this header
+    """
+    if report_id:
+        report_id_index = headers.index("Report ID")
+        values_of_header_rows = [row[headers.index(header)] for row in rows if row[report_id_index] == report_id]
+    else:
+        values_of_header_rows = [row[headers.index(header)] for row in rows]
+
+    # Remove empty, unwanted and duplicate values
     allowed_values = []
     for value in values_of_header_rows:
         contains_disallowed = False
         for disallowed in disallowed_row_values:
-            if disallowed in value.lower() or value.strip() == "" or value is None:
+            if disallowed in value.lower() or value.lower().strip().rstrip(".") == "" or value is None:
                 contains_disallowed = True
                 break
         if not contains_disallowed:
@@ -702,6 +796,13 @@ def get_values_from_rows_for_header(rows, header, headers):
 
 
 def handle_simple_field(model, header_entry, values_of_header_rows):
+    """
+    Handles the setting of a simple field based on the field type taken from the header entry, either str or int, as well as the resolution method, either combine or single
+    Args:
+        model: The model to save changes to
+        header_entry: The header entry that contains the information for this field
+        values_of_header_rows: The values of the rows for this record
+    """
     if values_of_header_rows:
         if header_entry["resolution_method"] == "combine":
             if header_entry["data_type"] == "str":
@@ -716,13 +817,18 @@ def handle_simple_field(model, header_entry, values_of_header_rows):
                 value = max(all_float_values) if all_float_values else 0
         else:
             value = "" if header_entry["data_type"] == "str" else 0
-    else:
-        value = "" if header_entry["data_type"] == "str" else 0
-    setattr(model, header_entry["field_name"], value)
-    model.save()
+        setattr(model, header_entry["field_name"], value)
+        model.save()
 
 
 def handle_derived_evaluation_fields(evaluation, rows, headers):
+    """
+    Handles fields that need to be calculated or are derived from multiple columns such as evaluation type
+    Args:
+        evaluation: The evaluation to save changes to
+        rows: The rows that contain the data for the evaluation
+        headers: The headers from the file, used to ascertain which column in each row contains the relevant data
+    """
     issue_description_row_values = get_values_from_rows_for_header(
         rows, derived_fields["issue_description_option"], headers
     )
@@ -797,14 +903,23 @@ def handle_derived_evaluation_fields(evaluation, rows, headers):
     setattr(evaluation, "evaluation_type", evaluation_types)
     evaluation.save()
 
+    # Set sample_size_details to any values that don't match options of sample_size
     sample_size_values = get_values_from_rows_for_header(rows, derived_fields["sample_size_details"], headers)
     sample_size_values_text = [sample_size for sample_size in sample_size_values if not sample_size.isdigit()]
-    sample_size_details = ". ".join(s.strip().rstrip(".") for s in sample_size_values_text) + "."
-    setattr(evaluation, "sample_size_details", sample_size_details)
+    sample_size_details = ". ".join(s.strip().rstrip(".") for s in sample_size_values_text)
+    if sample_size_details:
+        setattr(evaluation, "sample_size_details", sample_size_details + ".")
     evaluation.save()
 
 
 def handle_single_choice_field(model, header_entry, values_of_header_rows):
+    """
+    Handles the selecting of a single choice field based on either choices or from choice maps declared at the top of this script
+    Args:
+        model: The model to save changes to
+        header_entry: The header entry that contains the information for this field
+        values_of_header_rows: The values of the rows for this record
+    """
     if values_of_header_rows:
         most_chosen_choice = max(set(values_of_header_rows), key=values_of_header_rows.count)
         most_chosen_choice = most_chosen_choice.rstrip(".")
@@ -822,6 +937,13 @@ def handle_single_choice_field(model, header_entry, values_of_header_rows):
 
 
 def handle_multiple_choice_field(model, header_entry, values_of_header_rows):
+    """
+    Handles the selecting of a multiple choice field based on either choices or from choice maps declared at the top of this script
+    Args:
+        model: The model to save changes to
+        header_entry: The header entry that contains the information for this field
+        values_of_header_rows: The values of the rows for this record
+    """
     if values_of_header_rows:
         item_choices = header_entry["data_type"]
         lower_values_of_header_rows = [row_value.lower().strip().rstrip(".") for row_value in values_of_header_rows]
@@ -846,14 +968,17 @@ def handle_multiple_choice_field(model, header_entry, values_of_header_rows):
 
 
 def transform_and_create_from_rows(rows, headers):
+    """
+    Handles each evaluation record by creating each relevant object individually and handling each column through the use of handle_simple_field, handle_single_choice_field and handle_multiple_choice_field
+    Args:
+        rows: The rows of data to handle for this evaluation
+        headers: The headers from the files first row, used to match column data with headers
+    """
     evaluation = models.Evaluation.objects.create()
     evaluation.visibility = "PUBLIC"
     evaluation.save()
 
-    # Check header type from dict
-    # Functions for each type
-    # Assign evaluation value based on header value, type and resolution type (make sure remove values from disallowed values array)
-    # Organisation needs to be split by ';', stripped and compared in a 'contain' query
+    evaluation_report_ids = get_evaluation_report_ids(rows, headers)
 
     # Evaluation headers
     for header in headers:
@@ -870,48 +995,132 @@ def transform_and_create_from_rows(rows, headers):
             elif header_entry["resolution_method"] == "multiple_choice":
                 handle_multiple_choice_field(evaluation, header_entry, values_of_header_rows)
 
+    # Intervention headers
+    for evaluation_report_id in evaluation_report_ids:
+        intervention = models.Intervention()
+        intervention.evaluation = evaluation
+        for header in headers:
+            if header in intervention_headers:
+                header_entry = intervention_headers[header]
+                values_of_header_rows = get_values_from_rows_for_header(rows, header, headers, evaluation_report_id)
+                if header_entry["data_type"] in (
+                    "str",
+                    "int",
+                ):
+                    handle_simple_field(intervention, header_entry, values_of_header_rows)
+                elif header_entry["resolution_method"] == "choice":
+                    handle_single_choice_field(intervention, header_entry, values_of_header_rows)
+                elif header_entry["resolution_method"] == "multiple_choice":
+                    handle_multiple_choice_field(intervention, header_entry, values_of_header_rows)
+
+    # Links headers
+    for evaluation_report_id in evaluation_report_ids:
+        link = models.LinkOtherService()
+        link.evaluation = evaluation
+        for header in headers:
+            # Looping link entries because two fields in links are being set by one csv field
+            for entry in links_headers:
+                if header in entry:
+                    header_entry = entry[header]
+                    values_of_header_rows = get_values_from_rows_for_header(rows, header, headers, evaluation_report_id)
+                    if header_entry["data_type"] in (
+                        "str",
+                        "int",
+                    ):
+                        handle_simple_field(link, header_entry, values_of_header_rows)
+                    elif header_entry["resolution_method"] == "choice":
+                        handle_single_choice_field(link, header_entry, values_of_header_rows)
+                    elif header_entry["resolution_method"] == "multiple_choice":
+                        handle_multiple_choice_field(link, header_entry, values_of_header_rows)
+
+    # Outcome measures headers
+    for evaluation_report_id in evaluation_report_ids:
+        outcome_measure = models.OutcomeMeasure()
+        outcome_measure.evaluation = evaluation
+        for header in headers:
+            if header in outcome_measure_headers:
+                header_entry = outcome_measure_headers[header]
+                values_of_header_rows = get_values_from_rows_for_header(rows, header, headers, evaluation_report_id)
+                if header_entry["data_type"] in (
+                    "str",
+                    "int",
+                ):
+                    handle_simple_field(outcome_measure, header_entry, values_of_header_rows)
+                elif header_entry["resolution_method"] == "choice":
+                    handle_single_choice_field(outcome_measure, header_entry, values_of_header_rows)
+                elif header_entry["resolution_method"] == "multiple_choice":
+                    handle_multiple_choice_field(outcome_measure, header_entry, values_of_header_rows)
+
+    # Other measures headers
+    for evaluation_report_id in evaluation_report_ids:
+        other_measure = models.OtherMeasure()
+        other_measure.evaluation = evaluation
+        for header in headers:
+            if header in other_measure_headers:
+                header_entry = other_measure_headers[header]
+                values_of_header_rows = get_values_from_rows_for_header(rows, header, headers, evaluation_report_id)
+                if header_entry["data_type"] in (
+                    "str",
+                    "int",
+                ):
+                    handle_simple_field(other_measure, header_entry, values_of_header_rows)
+                elif header_entry["resolution_method"] == "choice":
+                    handle_single_choice_field(other_measure, header_entry, values_of_header_rows)
+                elif header_entry["resolution_method"] == "multiple_choice":
+                    handle_multiple_choice_field(other_measure, header_entry, values_of_header_rows)
+
+    # Costs headers
+    for evaluation_report_id in evaluation_report_ids:
+        cost = models.EvaluationCost()
+        cost.evaluation = evaluation
+        for header in headers:
+            if header in evaluation_cost_headers:
+                header_entry = evaluation_cost_headers[header]
+                values_of_header_rows = get_values_from_rows_for_header(rows, header, headers, evaluation_report_id)
+                if header_entry["data_type"] in (
+                    "str",
+                    "int",
+                ):
+                    handle_simple_field(cost, header_entry, values_of_header_rows)
+                elif header_entry["resolution_method"] == "choice":
+                    handle_single_choice_field(cost, header_entry, values_of_header_rows)
+                elif header_entry["resolution_method"] == "multiple_choice":
+                    handle_multiple_choice_field(cost, header_entry, values_of_header_rows)
+
+    # Processes and standards headers
+    for evaluation_report_id in evaluation_report_ids:
+        process_standard = models.ProcessStandard()
+        process_standard.evaluation = evaluation
+        for header in headers:
+            if header in processes_and_standards_headers:
+                header_entry = processes_and_standards_headers[header]
+                values_of_header_rows = get_values_from_rows_for_header(rows, header, headers, evaluation_report_id)
+                if header_entry["data_type"] in (
+                    "str",
+                    "int",
+                ):
+                    handle_simple_field(process_standard, header_entry, values_of_header_rows)
+                elif header_entry["resolution_method"] == "choice":
+                    handle_single_choice_field(process_standard, header_entry, values_of_header_rows)
+                elif header_entry["resolution_method"] == "multiple_choice":
+                    handle_multiple_choice_field(process_standard, header_entry, values_of_header_rows)
+
     # Derived evaluation headers
     handle_derived_evaluation_fields(evaluation, rows, headers)
 
-    return rows
-
-
-single_choice_fields = {
-    "Impact - Analysis framework": choices.ImpactFramework,  # Most don't match, going to have to match with OTHER mostly
-    "Impact - Analysis basis": choices.ImpactAnalysisBasis,  # Matches exactly
-    "Impact - Primary effect size measure type": choices.ImpactMeasureType,  # Only a small amount match, all others should go into "Other"
-    "Impact - Primary effect size measure interval": choices.ImpactMeasureInterval,  # Some match, some don't, add extras to "Other"
-    "Impact - Interpretation type": choices.ImpactInterpretationType,  # Some match, others don't so add to "other", should we add "None" to accepted values
-    "Impact - Fidelity of report": choices.YesNo,  # Need a new match for yes/no, options are Y, N and Y (AA), ignore extras
-    "Ethics committee approval": choices.YesNo,  # Need a new match for yes/no, options are Y, N and Y (AA), ignore extras
-    "Primary or secondary outcome": choices.OutcomeType,  # Some match, ignore those that don't
-    "Direct or surrogate": choices.OutcomeMeasure,  # Some match, ignore those that don't
-    "Measure type": choices.MeasureType,  # Matches types for some (do lower comparison anyway) Other is implied by not matching any
-    "Other outcomes - Outcome measure type": choices.MeasureType,  # Matches types for some (do lower comparison anyway) Other is implied by not matching any
-    "Conformity": choices.FullNoPartial,  # Matches values (do lower comparison anyway)
-}
-
-
-multi_choice_fields = {
-    # "topics": choices.Topic,  # Not included in CSV
-    # "evaluation type": choices.EvaluationTypeOptions,  # Done with derived fields
-    "Impact - Design": choices.ImpactEvalDesign,  # impact design name
-    # "document types": choices.DocumentType,  # Documents not included in csv,
-    # "aspect name": choices.ProcessEvaluationAspects,  # in ProcessEvaluationDesignAspectsSchema, not in CSV
-    # "aspects_measured": choices.ProcessEvaluationAspects,  # in ProcessEvaluationMethodSchema, not in CSV
-}
+    # TODO: Organisations, costs, time points, figure out impact_interpretation_type data type?
 
 
 def import_and_upload_evaluations(url):
     filename = save_url_to_data_dir(url)
     headers = get_sheet_headers(filename)
     rows = get_data_rows(filename)
-    # for choice_field in multi_choice_fields.keys():
+    # for choice_field in ["Impact - Interpretation type"]:
     #     values = get_values_from_rows_for_header(rows, choice_field, headers)
     #     for value in values:
     #         print(value)
     #         print("\n")
-    unique_ids = get_evaluation_ids(rows, headers)
-    for unique_id in unique_ids[0:2]:
-        rows_for_id = get_evaluation_rows_for_id(unique_id, rows, headers)
+    unique_row_ids = get_evaluation_ids(rows, headers)
+    for unique_row_id in unique_row_ids[0:2]:
+        rows_for_id = get_evaluation_rows_for_id(unique_row_id, rows, headers)
         transform_and_create_from_rows(rows_for_id, headers)
