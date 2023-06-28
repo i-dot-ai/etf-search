@@ -59,7 +59,10 @@ def get_topic_display_name(db_name):
 
 
 def get_organisation_display_name(db_name):
+    orgs = [organisation[1] for organisation in enums.Organisation.choices]
+    print(orgs)
     result = [organisation[1] for organisation in enums.Organisation.choices if organisation[0] == db_name]
+    print(db_name)
     return result[0]
 
 
@@ -239,6 +242,7 @@ class Evaluation(TimeStampedModel, UUIDPrimaryKeyBase, NamedModel):
         return [get_topic_display_name(x) for x in self.topics]
 
     def get_list_organisations_display_names(self):
+        print(self.organisations)
         return [get_organisation_display_name(x) for x in self.organisations]
 
     def get_list_evaluation_types_display_names(self):

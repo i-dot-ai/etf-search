@@ -3,7 +3,7 @@ import pathlib
 
 import httpx
 from django.conf import settings
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, FieldDoesNotExist
 from django.core.management.base import BaseCommand
 from django.db import DataError
 
@@ -589,11 +589,11 @@ evaluation_headers = {
         "resolution_method": "combine",
         "data_type": "str",
     },
-    # "Government departments": {
-    #     "field_name": "organisations",
-    #     "resolution_method": "multiple_choice",
-    #     "data_type": organisation_choices,
-    # },
+    "Government departments": {
+        "field_name": "organisations",
+        "resolution_method": "multiple_choice",
+        "data_type": organisation_choices,
+    },
 }
 
 # Organisation
@@ -1159,22 +1159,26 @@ def handle_multiple_choice_field(model, header_entry, values_of_header_rows):
         if present_choices:
             setattr(model, header_entry["field_name"], present_choices)
             model.save()
-        if not_present_choices:
-            if "OTHER" not in present_choices:
-                present_choices.append("OTHER")
-                setattr(model, header_entry["field_name"], present_choices)
-                model.save()
-            try:
-                other_value = ". ".join(s.strip().rstrip(".") for s in not_present_choices) + "."
-                setattr(model, f"{header_entry['field_name']}_other", other_value)
-                model.save()
-            except (ValueError, DataError):
-                other_value = ". ".join(s.strip().rstrip(".") for s in not_present_choices) + "."
-                max_length = model._meta.get_field(f"{header_entry['field_name']}_other").max_length
-                setattr(model, f"{header_entry['field_name']}_other", other_value[: max_length - 1])
-                model.save()
-            except ValidationError:
-                pass
+        try:
+            model._meta.get_field(f"{header_entry['field_name']}_other")
+            if not_present_choices:
+                if "OTHER" not in present_choices:
+                    present_choices.append("OTHER")
+                    setattr(model, header_entry["field_name"], present_choices)
+                    model.save()
+                try:
+                    other_value = ". ".join(s.strip().rstrip(".") for s in not_present_choices) + "."
+                    setattr(model, f"{header_entry['field_name']}_other", other_value)
+                    model.save()
+                except (ValueError, DataError):
+                    other_value = ". ".join(s.strip().rstrip(".") for s in not_present_choices) + "."
+                    max_length = model._meta.get_field(f"{header_entry['field_name']}_other").max_length
+                    setattr(model, f"{header_entry['field_name']}_other", other_value[: max_length - 1])
+                    model.save()
+                except ValidationError:
+                    pass
+        except FieldDoesNotExist:
+            pass
 
 
 def transform_and_create_from_rows(rows, headers):
