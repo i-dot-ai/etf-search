@@ -66,11 +66,11 @@ class AlternateChoice:
 
 
 yes_no_choices = (
-    AlternateChoice(label="y", name=choices.YesNo.YES.name),
-    AlternateChoice(label="y (aa)", name=choices.YesNo.YES.name),
-    AlternateChoice(label="yes", name=choices.YesNo.YES.name),
-    AlternateChoice(label="n", name=choices.YesNo.NO.name),
-    AlternateChoice(label="no", name=choices.YesNo.NO.name),
+    AlternateChoice(label="Y", name=choices.YesNo.YES.name),
+    AlternateChoice(label="Y (AA)", name=choices.YesNo.YES.name),
+    AlternateChoice(label="Yes", name=choices.YesNo.YES.name),
+    AlternateChoice(label="N", name=choices.YesNo.NO.name),
+    AlternateChoice(label="No", name=choices.YesNo.NO.name),
 )
 
 impact_design_name_choices = (
@@ -82,9 +82,6 @@ impact_design_name_choices = (
     AlternateChoice(label="Randomised Controlled Trial (RCT)", name=choices.ImpactEvalDesign.RCT.name),
     AlternateChoice(label="Interviews and group sessions", name=choices.ImpactEvalDesign.FOCUS_GROUPS.name),
     AlternateChoice(label="Surveys (ECTs)", name=choices.ImpactEvalDesign.SURVEYS_AND_POLLING.name),
-    AlternateChoice(
-        label="Output or performance monitoring", name=choices.ImpactEvalDesign.OUTPUT_OR_PERFORMANCE_MONITORING.name
-    ),
     AlternateChoice(label="Cluster randomised RCT", name=choices.ImpactEvalDesign.CLUSTER_RCT.name),
     AlternateChoice(
         label="Surveys, focus groups and interviews conducted", name=choices.ImpactEvalDesign.SURVEYS_AND_POLLING.name
@@ -343,10 +340,26 @@ organisation_choices = (
 
 
 evaluation_headers = {
-    "Evaluation title": {"field_name": "title", "resolution_method": "single", "data_type": "str"},
-    "Short title for evaluation": {"field_name": "short_title", "resolution_method": "single", "data_type": "str"},
-    "Evaluation summary": {"field_name": "brief_description", "resolution_method": "combine", "data_type": "str"},
-    "Issue to be addressed": {"field_name": "issue_description", "resolution_method": "combine", "data_type": "str"},
+    "Evaluation title": {
+        "field_name": "title",
+        "resolution_method": "single",
+        "data_type": "str",
+    },
+    "Short title for evaluation": {
+        "field_name": "short_title",
+        "resolution_method": "single",
+        "data_type": "str",
+    },
+    "Evaluation summary": {
+        "field_name": "brief_description",
+        "resolution_method": "combine",
+        "data_type": "str",
+    },
+    "Issue to be addressed": {
+        "field_name": "issue_description",
+        "resolution_method": "combine",
+        "data_type": "str",
+    },
     "Who is experiencing the issue": {
         "field_name": "those_experiencing_issue",
         "resolution_method": "combine",
@@ -372,13 +385,21 @@ evaluation_headers = {
         "resolution_method": "combine",
         "data_type": "str",
     },
-    "Eligibility criteria": {"field_name": "eligibility_criteria", "resolution_method": "combine", "data_type": "str"},
+    "Eligibility criteria": {
+        "field_name": "eligibility_criteria",
+        "resolution_method": "combine",
+        "data_type": "str",
+    },
     "Total number of people (or other unit) included in the evaluation": {
         "field_name": "sample_size",
         "resolution_method": "combine",
         "data_type": "int",
     },
-    "Type of unit": {"field_name": "sample_size_units", "resolution_method": "single", "data_type": "str"},
+    "Type of unit": {
+        "field_name": "sample_size_units",
+        "resolution_method": "single",
+        "data_type": "str",
+    },
     "Referral / recruitment route": {
         "field_name": "process_for_recruitment",
         "resolution_method": "combine",
@@ -409,7 +430,11 @@ evaluation_headers = {
         "resolution_method": "combine",
         "data_type": "str",
     },
-    "Impact - Equity": {"field_name": "impact_design_equity", "resolution_method": "combine", "data_type": "str"},
+    "Impact - Equity": {
+        "field_name": "impact_design_equity",
+        "resolution_method": "combine",
+        "data_type": "str",
+    },
     "Impact - Assumptions": {
         "field_name": "impact_design_assumptions",
         "resolution_method": "combine",
@@ -427,7 +452,7 @@ evaluation_headers = {
     },
     "Economic - Benefits included": {
         "field_name": "perspective_benefits",
-        "resolution_method": "Combine",
+        "resolution_method": "combine",
         "data_type": "str",
     },
     "Economic - Monetisation approach": {
@@ -460,7 +485,11 @@ evaluation_headers = {
         "resolution_method": "choice",
         "data_type": choices.ImpactAnalysisBasis,
     },
-    "Impact - Analysis set": {"field_name": "impact_analysis_set", "resolution_method": "combine", "data_type": "str"},
+    "Impact - Analysis set": {
+        "field_name": "impact_analysis_set",
+        "resolution_method": "combine",
+        "data_type": "str",
+    },
     "Impact - Primary effect size measure type": {
         "field_name": "impact_effect_measure_type",
         "resolution_method": "choice",
@@ -569,7 +598,7 @@ evaluation_headers = {
         "resolution_method": "combine",
         "data_type": "str",
     },
-    "Participant payment (if yes, please elaborate)": {
+    "Participant payment (if yes, please ellaborate)": {
         "field_name": "participant_payment",
         "resolution_method": "combine",
         "data_type": "str",
@@ -1005,10 +1034,12 @@ def handle_simple_field(model, header_entry, values_of_header_rows):
             setattr(model, header_entry["field_name"], value)
             model.save()
         except (ValueError, DataError):
+            print("error")
             max_length = model._meta.get_field(header_entry["field_name"]).max_length
             setattr(model, header_entry["field_name"], value[: max_length - 1])
             model.save()
         except ValidationError:
+            print("error")
             pass
 
 
@@ -1048,7 +1079,7 @@ def handle_derived_evaluation_fields(evaluation, rows, headers):
     process_evaluation_row_values_no = sum(
         1 for row_value in process_evaluation_row_values if row_value.lower() in negative_row_values
     )
-    if process_evaluation_row_values_no > process_evaluation_row_values_yes:
+    if process_evaluation_row_values_no < process_evaluation_row_values_yes:
         evaluation_types.append(choices.EvaluationTypeOptions.PROCESS.value)
 
     impact_evaluation_row_values = get_values_from_rows_for_header(rows, derived_fields["impact_evaluation"], headers)
@@ -1058,7 +1089,7 @@ def handle_derived_evaluation_fields(evaluation, rows, headers):
     impact_evaluation_row_values_no = sum(
         1 for row_value in impact_evaluation_row_values if row_value.lower() in negative_row_values
     )
-    if impact_evaluation_row_values_no > impact_evaluation_row_values_yes:
+    if impact_evaluation_row_values_no < impact_evaluation_row_values_yes:
         evaluation_types.append(choices.EvaluationTypeOptions.IMPACT.value)
 
     economic_evaluation_row_values = get_values_from_rows_for_header(
@@ -1070,7 +1101,7 @@ def handle_derived_evaluation_fields(evaluation, rows, headers):
     economic_evaluation_row_values_no = sum(
         1 for row_value in economic_evaluation_row_values if row_value.lower() in negative_row_values
     )
-    if economic_evaluation_row_values_no > economic_evaluation_row_values_yes:
+    if economic_evaluation_row_values_no < economic_evaluation_row_values_yes:
         evaluation_types.append(choices.EvaluationTypeOptions.ECONOMIC.value)
 
     other_evaluation_row_values = get_values_from_rows_for_header(rows, derived_fields["other_evaluation"], headers)
@@ -1154,7 +1185,7 @@ def handle_multiple_choice_field(model, header_entry, values_of_header_rows):
         not_present_choices = [
             lower_value_of_header_rows
             for lower_value_of_header_rows in lower_values_of_header_rows
-            if lower_value_of_header_rows not in item_choices
+            if lower_value_of_header_rows not in [item_choice.label for item_choice in item_choices]
         ]
         if present_choices:
             setattr(model, header_entry["field_name"], present_choices)
@@ -1162,7 +1193,9 @@ def handle_multiple_choice_field(model, header_entry, values_of_header_rows):
         try:
             model._meta.get_field(f"{header_entry['field_name']}_other")
             if not_present_choices:
-                if "OTHER" not in present_choices:
+                if (
+                    "OTHER" not in present_choices
+                ):  # REDO CHECK FOR OTHER VALUES AS A LIST COMPREHENSION THAT REMOVES ALL VALUES THAT MATCH, THEN CHECK LIST0
                     present_choices.append("OTHER")
                     setattr(model, header_entry["field_name"], present_choices)
                     model.save()
@@ -1329,18 +1362,18 @@ def import_and_upload_evaluations(url):
     filename = save_url_to_data_dir(url)
     headers = get_sheet_headers(filename)
     rows = get_data_rows(filename)
-    # for org in organisation_choices:
-    #     for org_choice in enums.org_tuples:
-    #         if org_choice[0] == org.name:
-    #             print(f"AlternateChoice(label=\"{org.label}\", name=\"{org_choice[1]}\"),")
-    # print("\n")
-    # for choice_field in ["Government departments"]:
-    #     values = get_values_from_rows_for_header(rows, choice_field, headers)
-    #     print(values)
+    for choice_field in ["Ethics committee approval"]:
+        values = get_values_from_rows_for_header(rows, choice_field, headers)
+        print(values)
     #     for value in values:
     #         print(f"AlternateChoice(label=\"{value}\", name=enums.Organisation..name),")
     #         print("\n")
-    unique_row_ids = get_evaluation_ids(rows, headers)
-    for unique_row_id in unique_row_ids:
-        rows_for_id = get_evaluation_rows_for_id(unique_row_id, rows, headers)
-        transform_and_create_from_rows(rows_for_id, headers)
+    # unique_row_ids = get_evaluation_ids(rows, headers)
+    # for unique_row_id in unique_row_ids[0]:
+    #     rows_for_id = get_evaluation_rows_for_id(unique_row_id, rows, headers)
+    #     print(rows_for_id)
+    # transform_and_create_from_rows(rows_for_id, headers)
+    # unique_row_ids = get_evaluation_ids(rows, headers)
+    # for unique_row_id in unique_row_ids:
+    #     rows_for_id = get_evaluation_rows_for_id(unique_row_id, rows, headers)
+    #     transform_and_create_from_rows(rows_for_id, headers)

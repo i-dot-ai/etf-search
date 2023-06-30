@@ -1,3 +1,6 @@
+from etf.evaluation import models
+from etf.evaluation.management.commands.upload_rsm_data import transform_and_create_from_rows
+
 headers = [
     "Evaluation ID",
     "Report ID",
@@ -134,139 +137,245 @@ headers = [
 ]
 
 data_row = [
-    "1",
-    "1",
-    "https://www.gov.uk/government/publications/lstf-evaluation-visitor-travel-and-sustainable-transport",
-    "Local Sustainable Transport Fund Evaluation",
-    "LSTF evaluation",
-    "N",
-    "Y",
-    "N",
-    "N",
-    "Local Sustainable Transport Fund Visitor Travel Case Study Final Report",
-    "Main final report",
-    "Department for Transport",
-    "Cumbria Tourism",
-    "This case study examines two LSTF programmes within three national parks which seek to address the issues arising from car-borne visitor travel through the implementation of sustainable transport schemes. The case study outlines the interventions that were implemented across the visitor areas and examines their potential impact on visitor travel behaviour.",
-    "Jul",
-    "2011",
-    "Mar",
-    "2015",
-    "Information not identified within the report",
-    "",
-    "Dec",
-    "2016",
-    "",
-    "Analysis",
-    "Information not identified within the report",
-    "2012",
-    "Information not identified within the report",
-    "2014",
-    "issues arising from car-borne visitor travel",
-    "conservation and recreation interests (e.g. wildlife trusts, National Trust, CTC/Sustrans) and local communities (e.g. parish councils, community groups, single-issue groups)",
-    "Information not announced in the report",
-    "The visitors to the parks also generate large amounts of car traffic that increasingly compromises the visitor experience and many of the special qualities that draw both residents and visitors to the three national parks in the first place. Air and water pollution levels rise; habitats and landscape character are threatened by vehicle encroachment; tranquillity is broken by traffic noise; and the wider impacts of transport emissions and their contribution to climate change are already being seen in changing ecosystems, migration patterns and other critical aspects of species and habitat survival.",
-    "Department for Transport",
-    "The purpose of the LSTF was to enable the delivery by local transport authorities of sustainable transport solutions that support economic growth while reducing carbon. These solutions would be geared to supporting jobs and business through effectively tackling the problems of congestion, improving the reliability and predictability of journey times, enabling economic investment and enhancing access to employment.",
-    "Visitors. The case study outlines the interventions that were implemented across the visitor areas and examines their potential impact on visitor travel behaviour. Lessons are also drawn on the implementation and delivery of LSTF funded measures across the visitor areas studied",
-    "Visitors to the area",
-    "186",
-    "people",
-    "Local Sustainable Transport Fund",
-    "The Local Sustainable Transport Fund1 (LSTF) supported investment in 96 local sustainable transport programmes between July 2011 and March 2015.",
-    "• To support the local economy and facilitate economic growth, for example by reducing congestion, improving the reliability and predictability of journey times, or enhancing access to employment and other essential services; and • To reduce carbon emissions, for example by bringing about an increase in the volume and proportion of journeys made by low carbon sustainable modes including walking and cycling.",
-    "support provided new or enhanced bus services, including the cost of operation, marketing as well as associated roadside infrastructure such as improvements to bus waiting facilities and information.",
-    "Funded local transport schemes",
-    "New Forest National Park Authority",
-    "New Forest • An additional New Forest Tour route – the Blue Route – was introduced with LSTF funding support in 2013 and received a reduced amount of subsidy in 2014. All three New Forest Tour routes will operate commercially for the first time in 2015. • Development of a new responsive website for the New Forest Tour, together with full social media integration, online ticket sales and digital PR. • Enhancements to the New Forest Tour commentary, including GPS triggered commentary announcements. • Development of customer focussed collaterals, such as guide books, walks and cycle rides accessible from the New Forest Tour • Funding subsidy for the Beach Bus in 2013 and 2014, facilitating routing and frequency improvements to make the service more relevant to visitors. • Development of the Beach Bus brand identity, website and bus liveries. • 1 FTE Sustainable Transport Officer with responsibility for visitor bus services.",
-    "New Forest National Park",
-    "The Local Sustainable Transport Fund1 (LSTF) supported investment in 96 local sustainable transport programmes between July 2011 and March 2015.",
-    "Information not identified in the report",
-    "Information not identified in the report",
-    "Information not identified in the report",
-    "England",
-    "£560m funding programme",
-    "Information not identified in the report",
-    "Information not identified in the report",
-    "N/A",
-    "N/A",
-    "N/A",
-    "N/A",
-    "N/A",
-    "N/A",
-    "Output or performance monitoring",
-    "Tracking these indicators over time has made it possible to measure increased opportunities to get to and around project areas in a sustainable way, indicate which interventions have been most popular, and demonstrate the extent to which the expected LSTF outcome have materialised to date.",
-    "information not easily identified within the report",
-    "The project monitoring programme developed a series of indicators to track activity within the project areas. Indicators were selected on the basis of their relevance and availability and where possible are consistent across the project areas. Key indicators included: • Bus service passenger journey numbers, using data from bus ticket machines • Volume of cyclists, using fixed on and off road cycle counters • Volume of vehicles, using fixed traffic counters • Volume of rail passengers, using annual entries and exits from rail stations For the indicators listed above, the project monitoring allowed for a broad high level overview of activity within the project areas. For some of these indicators it isn’t possible to categorise the end user i.e. data may apply to a visitor, resident, business traveller etc. As such increases or decreases in activity cannot be robustly apportioned to LSTF interventions alone. That said, some project monitoring indicators related specifically to LSTF funded interventions which did allow apportionment, these included: • Number of meaningful engagements with the New Forest Travel concierge • Number of car club members, and miles • Beach Bus passenger journey numbers • Volume of participants in Skyride events Data were collected for the calendar years 2012, 2013 and 2014. However, not all indicators \nwere available in 2012 and therefore for some indicators meaningful analysis can only be \ndemonstrated between 2013 and 2014. ",
-    "information not easily identified within the report",
-    "information not easily identified within the report",
-    "information not easily identified within the report",
-    "Results have been extrapolated based on an assumption that the GoLakes Travel area contains approximately half of the total visitor numbers in the Lake District National Park area and as such are best estimates",
-    "Due to the limitations of both time and budget, the indicators tracked do not cover the LSTF projects in their entirety, but instead were selective.",
-    "",
-    "N/A",
-    "N/A",
-    "N/A",
-    "N/A",
-    "N/A",
-    "N/A",
-    "N/A",
-    "N/A",
-    "",
-    "Information not identified within the report",
-    "Information not identified within the report",
-    "interviewed 300 businesses by telephone in the Lake District, South Downs and New Forest National Parks.",
-    "Relative measure",
-    "Numerical outcome",
-    "Information not identified within the report",
-    "Information not identified within the report",
-    "Information not identified within the report",
-    "Information not identified within the report",
-    "Information not identified within the report",
-    "Information not identified within the report",
-    "Information not identified within the report",
-    "Information not identified within the report",
-    "N/A",
-    "N/A",
-    "Reduced congestion",
-    "Information not identified within the report",
-    "Direct",
-    "Continuous",
-    "average daily traffic counts",
-    "LSTF Visitor Travel Case Study Project Monitoring 2014",
-    "Information not identified within the report",
-    "2014",
-    "Information not identified within the report",
-    "Information not identified within the report",
-    "N/A",
-    "N/A",
-    "N/A",
-    "N/A",
-    "N/A",
-    "N/A",
-    "The Business Survey data showed creating links with local stakeholders and businesses to help promote and increase sustainable travel was a valuable technique employed by all three parks.",
-    "Visitor Bus Services: The overall trend for visitor bus journeys in LSTF areas increased by 3.7% between 2012 and 2014 (555,715 journeys in 2012 and 576,068 journeys in 2014). Rates of increase have been mixed, with the largest observed increase to service levels nearly three times greater than at baseline (from 860 journeys in 2012 to 2,375 journeys in 2014) and the greatest decrease in service at -9.4% (from 89,141 journeys in 2012 to 80,763 journeys in 2014). • Cycling: Significant growth in the South Downs, with an average 93% increase between 2012 and 2014 at cycle counter locations (2,326 counts in 2012 and 4,485 counts in 2014), compared to a 24% growth in the New Forest between 2012 and 2014 (395 counts in 2012 and 491 counts in 2014). The Lake District demonstrated a 30.7% increase in the number of cycles carried on the Windermere Bike Boat between 2013 and 2014 (1,164 cycles in 2013 and 1,521 cycles in 2014). • Pay-as-you-drive Cars: This Lake District only initiative experienced challenges and after a positive 2013, popularity declined in 2014 (a 38% decrease overall from 9,463 miles in 2012 to 5,851 miles in 2014). • Hubs and Parking: The number of train passengers accessing the parks via the rail network, overall increased by 2.8% (station entries and exits 19.81 million in 2012 and 20.37 million in 2014), ranging from a decrease of -1.8% in the New Forest (station entries and exits 2.41 million in 2012 to 2.37 million in 2014) and increase of 5.7% in the Lake District (station entries and exits 1.04 million in 2012 to 1.10 million in 2014). Slight overall increases in vehicle traffic were evidenced over the project period, but are likely to reflect wider economic and social activity rather than a consequence of the LSTF interventions.",
-    "N/A",
-    "N/A",
-    "N/A",
-    "N/A",
-    "Information not identified within the report",
-    "Information not identified within the report",
-    "Information not identified within the report",
-    "Information not identified within the report",
-    "Information not identified within the report",
-    "Information not identified within the report",
-    "Information not identified within the report",
-    "N",
-    "Information not identified within the report",
-    "Information not identified within the report",
-    "Information not identified within the report",
-    "Information not identified within the report",
-    "Information not identified within the report",
-    "Information not identified within the report",
-    "Information not identified within the report",
-    "Information not identified within the report",
-    "",
-    "",
-    "",
+    [
+        "1",  # eval id
+        "1",  # report id
+        "https://www.google.com/",  # govuk link
+        "Evaluation title",  # eval title
+        "Short evaluation title",  # short title
+        "N",  # process eval
+        "Y",  # impact eval
+        "N",  # economic eval
+        "N",  # other eval
+        "Report title",  # report title
+        "Report type",  # report type
+        "Department for Transport",  # organisation
+        "Author name",  # author name
+        "A summary of the evaluation",  # eval summary
+        "Jul",  # intervention start month
+        "2011",  # intervention start year
+        "Mar",  # intervention end month
+        "2015",  # intervention end year
+        "A simple process and standard",  # process and standard
+        "1000",  # evaluation cost
+        "Dec",  # publication date month
+        "2016",  # publication date year
+        "",  # link to associated document
+        "Analysis",  # event category
+        "Information not identified within the report",  # event start month
+        "2012",  # event start year
+        "Information not identified within the report",  # event end month
+        "2014",  # event end year
+        "Issue to be addressed",  # issue to be addressed
+        "Those experiencing the issue",  # who is experiencing the issue
+        "Information not announced in the report",  # current practice
+        "Why is it important",  # why is it important / needed
+        "Department for Transport",  # who does it matter to
+        "Example text",  # what difference it makes
+        "People",  # studied population
+        "Visitors to the area",  # eligibility criteria
+        "186",  # total number of people in the evaluation
+        "people",  #  unit type
+        "Local Sustainable Transport Fund",  # intervention name
+        "Intervention brief description",  # intervention brief description
+        "Rationale for the intervention",  # intervention rationale
+        "Materials used",  # intervention materials used
+        "Procedures used for the intervention",  # intervention procedures used
+        "The person who delivered it",  # who delivered the intervention
+        "How was it delivered",  # how was the intervention delivered
+        "Where the intervention was delivered",  # where was the intervention delivered
+        "How often the intervention was delivered",  # how often was the intervention delivered
+        "Tailoring",  # tailoring
+        "How well was it delivered",  # how well it was delivered (fidelity)
+        "Resource requirements",  # resource requirements
+        "England",  # geographical information
+        "£69m funding programme",  # intervention cost
+        "Recruitment route",  # referral / recruitment route
+        "Recruitment schedule",  # referral / recruitment schedule
+        "Process design",  # process design
+        "Process method",  # process method
+        "20",  # process method sample size
+        "Process sample size process",  # process method sample size process
+        "Process description",  # process description
+        "Process rationale",  # process rationale for chosen method
+        "Output or performance monitoring",  # impact design
+        "Justification for design",  # impact justification for design
+        "Features that reflect the real world",  # impact features to reflect real world implementation
+        "Impact description",  # impact description
+        "Impact equity",  # impact equity
+        "440",  # impact method sample size
+        "Impact sample size process",  # impact method sample size process
+        "Impact assumptions",  # impact assumptions
+        "Due to the limitations of both time and budget...",  # impact limitations of approach
+        "Economic method",  # economic methods
+        "340",  # economic method sample size
+        "Sample size process",  # economic method sample size process
+        "A lot of costs that are included",  # economic costs included
+        "Some benefits included",  # economic benefits included
+        "Economic monetisation approach",  # economic monetisation approach
+        "Economic evaluation design",  # economic evaluation design
+        "Other evaluation design",  # other evaluation design
+        "Other summary of methods",  # other summary of methods
+        "Process description of analysis",  # process description of analysis
+        "Superiority",  # impact analysis framework
+        "Impact analysis basis",  # impact analysis basis
+        "Interviewed 300 businesses",  # impact analysis set
+        "Relative measure",  # impact primary effect size measure type
+        "Numerical outcome",  # impact primary effect size measure
+        "Confidence interval",  # impact primary effect size measure interval
+        "Primary effect measure description",  # impact primary effect size measure description
+        "Interpretation of intervals",  # impact interpretation type
+        "Impact sensitivity analysis",  # impact sensitivity analysis
+        "Subgroup analysis",  # impact subgroup analysis
+        "Data handling",  # impact missing data handling
+        "Yes",  # impact fidelity of report
+        "Description of analysis",  # impact description of analysis
+        "Economic description of analysis",  # economic description of analysis
+        "Other description of analysis",  # other description of analysis
+        "Reduced congestion",  # outcome title
+        "Primary",  # primary of secondary outcome
+        "Direct",  # direct or surrogate
+        "Continuous",  # measure type
+        "average daily traffic counts",  # description of measure
+        "Case study",  # collection procedures
+        "feb",  # timepoint of interest month
+        "2014",  # timepoint of interest year
+        "Minimum difference",  # minimum practically important difference
+        "Relevance of outcome",  # relevance of outcome
+        "Another outcome",  # other outcome name
+        "DISCRETE",  # other outcome measure type
+        "A small description",  # other outcome description of measure
+        "Timing",  # other outcome collection procedures and timing
+        "Process summary of findings",  # process summary of findings
+        "Process findings",  # process findings
+        "Impact summary findings",  # impact summary findings
+        "Impact findings",  # impact findings
+        "Economic summary of findings",  # economic summary of findings
+        "Economic findings",  # economic findings
+        "Other summary of findings",  # other summary of findings
+        "Other findings",  # other findings
+        "Y",  # ethical approval applied for
+        "N",  # ethics committee approval
+        "A small ethical question",  # ethics committee details
+        "Ethical evidence base",  # ethical state of a study given existing evidence base
+        "Risks to participants",  # risks to participants
+        "Risks to study team",  # risks to study team
+        "Participant involvement",  # participant involvement
+        "N",  # participant consent
+        "Participant information",  # participant information
+        "Participant payment",  # participant payment
+        "Confidentiality and personal info",  # confidentiality and personal data
+        "Breaking confidentiality",  # breaking confidentiality
+        "Other ethical info",  # other ethical information
+        "Name of standard or process",  # name of standard or process
+        "Conformity",  # conformity
+        "Process and standards description",  # process and standards description
+    ],
 ]
+
+
+def test_upload_evaluation():
+    evaluations = models.Evaluation.objects.all()
+    evaluations.delete()
+    transform_and_create_from_rows(data_row, headers)
+    # print(data_row[0][headers.index("Impact - Analysis set")])
+    evaluation = models.Evaluation.objects.first()
+    assert evaluation.title == "Evaluation title", evaluation.title
+    assert evaluation.short_title == "Short evaluation title", evaluation.short_title
+    assert evaluation.evaluation_type == ["IMPACT"], evaluation.evaluation_type
+    assert evaluation.organisations == ["department-for-transport"], evaluation.organisations
+    assert evaluation.brief_description == "A summary of the evaluation.", evaluation.brief_description
+    assert evaluation.issue_description_option == "YES", evaluation.issue_description_option
+    assert evaluation.ethics_option == "YES", evaluation.ethics_option
+    assert evaluation.grants_option == "NO", evaluation.grants_option
+    assert evaluation.issue_description == "Issue to be addressed.", evaluation.issue_description
+    assert evaluation.those_experiencing_issue == "Those experiencing the issue.", evaluation.those_experiencing_issue
+    assert evaluation.why_improvements_matter == "Why is it important.", evaluation.why_improvements_matter
+    assert evaluation.who_improvements_matter_to == "Department for Transport.", evaluation.who_improvements_matter_to
+    assert evaluation.current_practice is None, evaluation.current_practice
+    assert evaluation.issue_relevance == "Example text.", evaluation.issue_relevance
+    assert evaluation.evaluation_type_other is None, evaluation.evaluation_type_other
+    assert evaluation.studied_population == "People.", evaluation.studied_population
+    assert evaluation.eligibility_criteria == "Visitors to the area.", evaluation.eligibility_criteria
+    # assert evaluation.sample_size == 186, evaluation.sample_size  # Sample size not being set
+    assert evaluation.sample_size_units == "people", evaluation.sample_size_units
+    assert evaluation.sample_size_details is None, evaluation.sample_size_details
+    assert evaluation.process_for_recruitment == "Recruitment route.", evaluation.process_for_recruitment
+
+    assert evaluation.recruitment_schedule == "Recruitment schedule.", evaluation.recruitment_schedule
+    assert evaluation.ethics_committee_approval == "NO", evaluation.ethics_committee_approval
+    assert evaluation.ethics_committee_details == "A small ethical question.", evaluation.ethics_committee_details
+    assert (
+        evaluation.ethical_state_given_existing_evidence_base == "Ethical evidence base."
+    ), evaluation.ethical_state_given_existing_evidence_base
+    assert evaluation.risks_to_participants == "Risks to participants.", evaluation.risks_to_participants
+    assert evaluation.risks_to_study_team == "Risks to study team.", evaluation.risks_to_study_team
+    assert evaluation.participant_involvement == "Participant involvement.", evaluation.participant_involvement
+    assert evaluation.participant_information == "Participant information.", evaluation.participant_information
+    assert evaluation.participant_consent == "N", evaluation.participant_consent
+    assert evaluation.participant_payment == "Participant payment.", evaluation.participant_payment
+    # assert evaluation.confidentiality_and_personal_data == "Confidentiality and personal info.", evaluation.confidentiality_and_personal_data  # Not setting
+    assert evaluation.breaking_confidentiality == "Breaking confidentiality.", evaluation.breaking_confidentiality
+    assert evaluation.other_ethical_information == "Other ethical info.", evaluation.other_ethical_information
+
+    assert evaluation.impact_design_name == ["OUTPUT_OR_PERFORMANCE_MONITORING"], evaluation.impact_design_name
+    assert evaluation.impact_design_name_other is None, evaluation.impact_design_name_other
+    assert evaluation.impact_design_justification == "Justification for design.", evaluation.impact_design_justification
+    assert evaluation.impact_design_description == "Impact description.", evaluation.impact_design_description
+    assert (
+        evaluation.impact_design_features == "Features that reflect the real world."
+    ), evaluation.impact_design_features
+    assert evaluation.impact_design_equity == "Impact equity.", evaluation.impact_design_equity
+    assert evaluation.impact_design_assumptions == "Impact assumptions.", evaluation.impact_design_assumptions
+    assert (
+        evaluation.impact_design_approach_limitations == "Due to the limitations of both time and budget."
+    ), evaluation.impact_design_approach_limitations
+
+    assert evaluation.impact_framework == "SUPERIORITY", evaluation.impact_framework
+    assert evaluation.impact_framework_other is None, evaluation.impact_framework_other
+    # assert evaluation.impact_basis == "Impact analysis basis.", evaluation.impact_basis  # not setting
+    assert evaluation.impact_basis_other is None, evaluation.impact_basis_other
+    # assert evaluation.impact_analysis_set == "interviewed 300 businesses.", evaluation.impact_analysis_set # not being set properly
+    assert evaluation.impact_effect_measure_type == "RELATIVE", evaluation.impact_effect_measure_type
+    assert evaluation.impact_effect_measure_type_other is None, evaluation.impact_effect_measure_type_other
+    assert (
+        evaluation.impact_primary_effect_size_measure == "Numerical outcome."
+    ), evaluation.impact_primary_effect_size_measure
+    assert evaluation.impact_effect_measure_interval == "CONFIDENCE", evaluation.impact_effect_measure_interval
+    assert evaluation.impact_effect_measure_interval_other is None, evaluation.impact_effect_measure_interval_other
+    assert evaluation.impact_primary_effect_size_desc == "Primary effect measure description.", evaluation.impact_primary_effect_size_desc
+    assert evaluation.impact_interpretation_type == "INTERVALS", evaluation.impact_interpretation_type
+    assert evaluation.impact_interpretation_type_other is None, evaluation.impact_interpretation_type_other
+    # assert evaluation.impact_sensitivity_analysis == "Impact sensitivity analysis.", evaluation.impact_sensitivity_analysis  # Not setting correctly
+    # assert evaluation.impact_subgroup_analysis == "Subgroup analysis.", evaluation.impact_subgroup_analysis  # Not setting
+    assert evaluation.impact_missing_data_handling == "Data handling.", evaluation.impact_missing_data_handling
+    assert evaluation.impact_fidelity == "YES", evaluation.impact_fidelity
+    # assert evaluation.impact_description_planned_analysis == "Description of analysis.", evaluation.impact_description_planned_analysis  # Not setting correctly
+
+    assert evaluation.economic_type is None, evaluation.economic_type
+    assert evaluation.perspective_costs == "A lot of costs that are included.", evaluation.perspective_costs
+    assert evaluation.perspective_benefits == "Some benefits included.", evaluation.perspective_benefits  # not being set
+    assert evaluation.monetisation_approaches == "Economic monetisation approach.", evaluation.monetisation_approaches
+    assert evaluation.economic_design_details == "Economic evaluation design.", evaluation.economic_design_details
+
+    # assert evaluation.economic_analysis_description == "Economic description of analysis.", evaluation.economic_analysis_description  # not setting
+
+    assert evaluation.other_design_type == "Other evaluation design.", evaluation.other_design_type
+
+    # assert evaluation.other_analysis_description == "Other description of analysis.", evaluation.other_analysis_description
+
+    assert evaluation.impact_comparison is None, evaluation.impact_comparison
+    assert evaluation.impact_outcome is None, evaluation.impact_outcome
+    assert evaluation.impact_interpretation is None, evaluation.impact_interpretation
+    assert evaluation.impact_interpretation_other is None, evaluation.impact_interpretation_other
+    assert evaluation.impact_point_estimate_diff is None, evaluation.impact_point_estimate_diff
+    assert evaluation.impact_lower_uncertainty is None, evaluation.impact_lower_uncertainty
+    assert evaluation.impact_upper_uncertainty is None, evaluation.impact_upper_uncertainty
+
+    assert evaluation.economic_summary_findings == "Economic summary of findings.", evaluation.economic_summary_findings
+    assert evaluation.economic_findings == "Economic findings.", evaluation.economic_findings
+
+    assert evaluation.other_summary_findings == "Other summary of findings.", evaluation.other_summary_findings
+    assert evaluation.other_findings == "Other findings.", evaluation.other_findings
+
+    assert False
