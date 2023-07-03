@@ -279,7 +279,7 @@ data_row = [
 def test_upload_evaluation():
     evaluations = models.Evaluation.objects.all()
     evaluations.delete()
-    transform_and_create_from_rows(data_row, headers)
+    transform_and_create_from_rows(1, data_row, headers)
     evaluation = models.Evaluation.objects.first()
     assert evaluation.title == "Evaluation title", evaluation.title
     assert evaluation.short_title == "Short evaluation title", evaluation.short_title
