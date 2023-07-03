@@ -22,7 +22,6 @@ disallowed_row_values = (
     "other (please specify)",
     "not announced",
     "n/a",
-    "na",
     "no information easily identified within the report",
     "information not included in the report",
     "information not specified within the report",
@@ -39,8 +38,6 @@ disallowed_row_values = (
     "information not identfied within the report",
     "information specified in a separate report",
     "missing - needs to be added",
-    "0",
-    "1",
     "Not applicablle",
     "no methodology identified within the report",
     "not applicablle",
@@ -1034,12 +1031,13 @@ def handle_simple_field(model, header_entry, values_of_header_rows):
             setattr(model, header_entry["field_name"], value)
             model.save()
         except (ValueError, DataError):
-            print("error")
+            print(f"Header {header_entry} could not assign value {value} to {header_entry['field_name']}. This is likely because the value is too long for the field.")  # noqa: T201
             max_length = model._meta.get_field(header_entry["field_name"]).max_length
             setattr(model, header_entry["field_name"], value[: max_length - 1])
             model.save()
         except ValidationError:
-            print("error")
+            print(
+                f"Header {header_entry} could not assign value {value} to {header_entry['field_name']}. This is likely because the value is the wrong type.")  # noqa: T201
             pass
 
 
@@ -1161,10 +1159,14 @@ def handle_single_choice_field(model, header_entry, values_of_header_rows):
                 model.save()
             except (ValueError, DataError):
                 other_value = ". ".join(s.strip().rstrip(".") for s in values_of_header_rows) + "."
+                print(
+                    f"Header {header_entry} could not assign value {other_value} to {header_entry['field_name']}_other. This is likely because the value is too long for the field. The value has been trimmed to fit.")  # noqa: T201
                 max_length = model._meta.get_field(f"{header_entry['field_name']}_other").max_length
                 setattr(model, f"{header_entry['field_name']}_other", other_value[: max_length - 1])
                 model.save()
             except ValidationError:
+                print(
+                    f"Header {header_entry} could not assign to {header_entry['field_name']}_other. This is likely because the value is the wrong type.")  # noqa: T201
                 pass
 
 
@@ -1205,10 +1207,14 @@ def handle_multiple_choice_field(model, header_entry, values_of_header_rows):
                     model.save()
                 except (ValueError, DataError):
                     other_value = ". ".join(s.strip().rstrip(".") for s in not_present_choices) + "."
+                    print(
+                        f"Header {header_entry} could not assign value {other_value} to {header_entry['field_name']}_other. This is likely because the value is too long for the field. The value has been trimmed to fit.")  # noqa: T201
                     max_length = model._meta.get_field(f"{header_entry['field_name']}_other").max_length
                     setattr(model, f"{header_entry['field_name']}_other", other_value[: max_length - 1])
                     model.save()
                 except ValidationError:
+                    print(
+                        f"Header {header_entry} could not assign to {header_entry['field_name']}_other. This is likely because the value is the wrong type.")  # noqa: T201
                     pass
         except FieldDoesNotExist:
             pass
@@ -1362,18 +1368,7 @@ def import_and_upload_evaluations(url):
     filename = save_url_to_data_dir(url)
     headers = get_sheet_headers(filename)
     rows = get_data_rows(filename)
-    for choice_field in ["Ethics committee approval"]:
-        values = get_values_from_rows_for_header(rows, choice_field, headers)
-        print(values)
-    #     for value in values:
-    #         print(f"AlternateChoice(label=\"{value}\", name=enums.Organisation..name),")
-    #         print("\n")
-    # unique_row_ids = get_evaluation_ids(rows, headers)
-    # for unique_row_id in unique_row_ids[0]:
-    #     rows_for_id = get_evaluation_rows_for_id(unique_row_id, rows, headers)
-    #     print(rows_for_id)
-    # transform_and_create_from_rows(rows_for_id, headers)
-    # unique_row_ids = get_evaluation_ids(rows, headers)
-    # for unique_row_id in unique_row_ids:
-    #     rows_for_id = get_evaluation_rows_for_id(unique_row_id, rows, headers)
-    #     transform_and_create_from_rows(rows_for_id, headers)
+    unique_row_ids = get_evaluation_ids(rows, headers)
+    for unique_row_id in unique_row_ids:
+        rows_for_id = get_evaluation_rows_for_id(unique_row_id, rows, headers)
+        transform_and_create_from_rows(rows_for_id, headers)
