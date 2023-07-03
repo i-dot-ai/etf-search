@@ -1062,16 +1062,16 @@ def handle_simple_field(model, header_entry, values_of_header_rows):
             setattr(model, header_entry["field_name"], value)
             model.save()
         except (ValueError, DataError):
-            print(
+            print(  # noqa: T201
                 f"Could not assign value {value} to {header_entry['field_name']}. This is likely because the value is too long for the field."
-            )  # noqa: T201
+            )
             max_length = model._meta.get_field(header_entry["field_name"]).max_length
             setattr(model, header_entry["field_name"], value[: max_length - 1])
             model.save()
         except ValidationError:
-            print(
+            print(  # noqa: T201
                 f"Could not assign value {value} to {header_entry['field_name']}. This is likely because the value is the wrong type."
-            )  # noqa: T201
+            )
             pass
 
 
@@ -1195,16 +1195,16 @@ def handle_single_choice_field(model, header_entry, values_of_header_rows):
                     model.save()
                 except (ValueError, DataError):
                     other_value = ". ".join(s.strip().rstrip(".") for s in values_of_header_rows) + "."
-                    print(
+                    print(  # noqa: T201
                         f"Could not assign value {other_value} to {header_entry['field_name']}_other. This is likely because the value is too long for the field. The value has been trimmed to fit."
-                    )  # noqa: T201
+                    )
                     max_length = model._meta.get_field(f"{header_entry['field_name']}_other").max_length
                     setattr(model, f"{header_entry['field_name']}_other", other_value[: max_length - 1])
                     model.save()
                 except ValidationError:
-                    print(
+                    print(  # noqa: T201
                         f"Could not assign to {header_entry['field_name']}_other. This is likely because the value is the wrong type."
-                    )  # noqa: T201
+                    )
                     pass
 
 
@@ -1246,16 +1246,16 @@ def handle_multiple_choice_field(model, header_entry, values_of_header_rows):
                         model.save()
                     except (ValueError, DataError):
                         other_value = ". ".join(s.strip().rstrip(".") for s in not_present_choices) + "."
-                        print(
+                        print(  # noqa: T201
                             f"Could not assign value {other_value} to {header_entry['field_name']}_other. This is likely because the value is too long for the field. The value has been trimmed to fit."
-                        )  # noqa: T201
+                        )
                         max_length = model._meta.get_field(f"{header_entry['field_name']}_other").max_length
                         setattr(model, f"{header_entry['field_name']}_other", other_value[: max_length - 1])
                         model.save()
                     except ValidationError:
-                        print(
+                        print(  # noqa: T201
                             f"Could not assign to {header_entry['field_name']}_other. This is likely because the value is the wrong type."
-                        )  # noqa: T201
+                        )
                         pass
             except FieldDoesNotExist:
                 pass
@@ -1423,9 +1423,9 @@ def import_and_upload_evaluations(url):
     unique_and_non_duplicate_row_ids = [
         unique_row_id for unique_row_id in unique_row_ids if unique_row_id not in existing_evaluation_ids
     ]
-    print(
+    print(  # noqa: T201
         f"{len(unique_row_ids) - len(unique_and_non_duplicate_row_ids)} duplicates found. {len(unique_and_non_duplicate_row_ids)} new records to be imported"
-    )  # noqa: T201
+    )
 
     for unique_row_id in unique_and_non_duplicate_row_ids:
         rows_for_id = get_evaluation_rows_for_id(unique_row_id, rows, headers)

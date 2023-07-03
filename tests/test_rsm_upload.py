@@ -177,7 +177,7 @@ data_row = [
         "People",  # studied population
         "Visitors to the area",  # eligibility criteria
         "186",  # total number of people in the evaluation
-        "people",  #  unit type
+        "people",  # unit type
         "Local Sustainable Transport Fund",  # intervention name
         "Intervention brief description",  # intervention brief description
         "Rationale for the intervention",  # intervention rationale
