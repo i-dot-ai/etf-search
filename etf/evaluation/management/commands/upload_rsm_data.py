@@ -1,5 +1,6 @@
 import csv
 import pathlib
+from collections import defaultdict
 
 import httpx
 from django.conf import settings
@@ -333,6 +334,36 @@ organisation_choices = (
         label="Department for Digital, Culture Media & Sport; Arts Council England",
         name="department-for-digital-culture-media-sport",
     ),
+)
+
+supports_other = defaultdict(
+    lambda: False,
+    {
+        yes_no_choices: False,
+        organisation_choices: False,
+        impact_design_name_choices: True,
+        choices.EvaluationTypeOptions: True,
+        choices.OutcomeType: False,
+        choices.OutcomeMeasure: False,
+        choices.YesNo: False,
+        choices.YesNoPartial: False,
+        choices.FullNoPartial: False,
+        choices.MeasureType: True,
+        choices.Topic: False,
+        choices.EvaluationVisibility: False,
+        choices.DocumentType: True,
+        choices.EventDateOption: True,
+        choices.EventDateType: False,
+        choices.EconomicEvaluationType: False,
+        choices.ImpactEvalInterpretation: True,
+        choices.ImpactEvalDesign: True,
+        choices.ImpactFramework: True,
+        choices.ImpactAnalysisBasis: True,
+        choices.ImpactMeasureInterval: True,
+        choices.ImpactMeasureType: True,
+        choices.ProcessEvaluationAspects: True,
+        choices.ProcessEvaluationMethods: True,
+    },
 )
 
 
@@ -1031,13 +1062,16 @@ def handle_simple_field(model, header_entry, values_of_header_rows):
             setattr(model, header_entry["field_name"], value)
             model.save()
         except (ValueError, DataError):
-            print(f"Header {header_entry} could not assign value {value} to {header_entry['field_name']}. This is likely because the value is too long for the field.")  # noqa: T201
+            print(
+                f"Could not assign value {value} to {header_entry['field_name']}. This is likely because the value is too long for the field."
+            )  # noqa: T201
             max_length = model._meta.get_field(header_entry["field_name"]).max_length
             setattr(model, header_entry["field_name"], value[: max_length - 1])
             model.save()
         except ValidationError:
             print(
-                f"Header {header_entry} could not assign value {value} to {header_entry['field_name']}. This is likely because the value is the wrong type.")  # noqa: T201
+                f"Could not assign value {value} to {header_entry['field_name']}. This is likely because the value is the wrong type."
+            )  # noqa: T201
             pass
 
 
@@ -1150,24 +1184,28 @@ def handle_single_choice_field(model, header_entry, values_of_header_rows):
             setattr(model, header_entry["field_name"], value)
             model.save()
         else:
-            value = "OTHER"
-            setattr(model, header_entry["field_name"], value)
-            model.save()
-            try:
-                other_value = ". ".join(s.strip().rstrip(".") for s in values_of_header_rows) + "."
-                setattr(model, f"{header_entry['field_name']}_other", other_value)
+            choices_support_other = supports_other[item_choices] or False
+            if choices_support_other:
+                value = "OTHER"
+                setattr(model, header_entry["field_name"], value)
                 model.save()
-            except (ValueError, DataError):
-                other_value = ". ".join(s.strip().rstrip(".") for s in values_of_header_rows) + "."
-                print(
-                    f"Header {header_entry} could not assign value {other_value} to {header_entry['field_name']}_other. This is likely because the value is too long for the field. The value has been trimmed to fit.")  # noqa: T201
-                max_length = model._meta.get_field(f"{header_entry['field_name']}_other").max_length
-                setattr(model, f"{header_entry['field_name']}_other", other_value[: max_length - 1])
-                model.save()
-            except ValidationError:
-                print(
-                    f"Header {header_entry} could not assign to {header_entry['field_name']}_other. This is likely because the value is the wrong type.")  # noqa: T201
-                pass
+                try:
+                    other_value = ". ".join(s.strip().rstrip(".") for s in values_of_header_rows) + "."
+                    setattr(model, f"{header_entry['field_name']}_other", other_value)
+                    model.save()
+                except (ValueError, DataError):
+                    other_value = ". ".join(s.strip().rstrip(".") for s in values_of_header_rows) + "."
+                    print(
+                        f"Could not assign value {other_value} to {header_entry['field_name']}_other. This is likely because the value is too long for the field. The value has been trimmed to fit."
+                    )  # noqa: T201
+                    max_length = model._meta.get_field(f"{header_entry['field_name']}_other").max_length
+                    setattr(model, f"{header_entry['field_name']}_other", other_value[: max_length - 1])
+                    model.save()
+                except ValidationError:
+                    print(
+                        f"Could not assign to {header_entry['field_name']}_other. This is likely because the value is the wrong type."
+                    )  # noqa: T201
+                    pass
 
 
 def handle_multiple_choice_field(model, header_entry, values_of_header_rows):
@@ -1192,43 +1230,48 @@ def handle_multiple_choice_field(model, header_entry, values_of_header_rows):
         if present_choices:
             setattr(model, header_entry["field_name"], present_choices)
             model.save()
-        try:
-            model._meta.get_field(f"{header_entry['field_name']}_other")
-            if not_present_choices:
-                if (
-                    "OTHER" not in present_choices
-                ):  # REDO CHECK FOR OTHER VALUES AS A LIST COMPREHENSION THAT REMOVES ALL VALUES THAT MATCH, THEN CHECK LIST0
-                    present_choices.append("OTHER")
-                    setattr(model, header_entry["field_name"], present_choices)
-                    model.save()
-                try:
-                    other_value = ". ".join(s.strip().rstrip(".") for s in not_present_choices) + "."
-                    setattr(model, f"{header_entry['field_name']}_other", other_value)
-                    model.save()
-                except (ValueError, DataError):
-                    other_value = ". ".join(s.strip().rstrip(".") for s in not_present_choices) + "."
-                    print(
-                        f"Header {header_entry} could not assign value {other_value} to {header_entry['field_name']}_other. This is likely because the value is too long for the field. The value has been trimmed to fit.")  # noqa: T201
-                    max_length = model._meta.get_field(f"{header_entry['field_name']}_other").max_length
-                    setattr(model, f"{header_entry['field_name']}_other", other_value[: max_length - 1])
-                    model.save()
-                except ValidationError:
-                    print(
-                        f"Header {header_entry} could not assign to {header_entry['field_name']}_other. This is likely because the value is the wrong type.")  # noqa: T201
-                    pass
-        except FieldDoesNotExist:
-            pass
+
+        choices_support_other = supports_other[item_choices] or False
+        if choices_support_other:
+            try:
+                model._meta.get_field(f"{header_entry['field_name']}_other")
+                if not_present_choices:
+                    if "OTHER" not in present_choices:
+                        present_choices.append("OTHER")
+                        setattr(model, header_entry["field_name"], present_choices)
+                        model.save()
+                    try:
+                        other_value = ". ".join(s.strip().rstrip(".") for s in not_present_choices) + "."
+                        setattr(model, f"{header_entry['field_name']}_other", other_value)
+                        model.save()
+                    except (ValueError, DataError):
+                        other_value = ". ".join(s.strip().rstrip(".") for s in not_present_choices) + "."
+                        print(
+                            f"Could not assign value {other_value} to {header_entry['field_name']}_other. This is likely because the value is too long for the field. The value has been trimmed to fit."
+                        )  # noqa: T201
+                        max_length = model._meta.get_field(f"{header_entry['field_name']}_other").max_length
+                        setattr(model, f"{header_entry['field_name']}_other", other_value[: max_length - 1])
+                        model.save()
+                    except ValidationError:
+                        print(
+                            f"Could not assign to {header_entry['field_name']}_other. This is likely because the value is the wrong type."
+                        )  # noqa: T201
+                        pass
+            except FieldDoesNotExist:
+                pass
 
 
-def transform_and_create_from_rows(rows, headers):
+def transform_and_create_from_rows(unique_row_id, rows, headers):
     """
     Handles each evaluation record by creating each relevant object individually and handling each column through the use of handle_simple_field, handle_single_choice_field and handle_multiple_choice_field
     Args:
+        unique_row_id: The ID from the CSV of the evaluation data to prevent duplicates
         rows: The rows of data to handle for this evaluation
         headers: The headers from the files first row, used to match column data with headers
     """
     evaluation = models.Evaluation.objects.create()
     evaluation.visibility = "PUBLIC"
+    evaluation.rsm_id = unique_row_id
     evaluation.save()
 
     evaluation_report_ids = get_evaluation_report_ids(rows, headers)
@@ -1361,6 +1404,8 @@ def transform_and_create_from_rows(rows, headers):
     # Derived evaluation headers
     handle_derived_evaluation_fields(evaluation, rows, headers)
 
+    print(f"Evaluation uploaded. Title: {evaluation.title or 'No title found'}. ID: {evaluation.id}")  # noqa: T201
+
     # TODO: Organisations, costs, time points, figure out impact_interpretation_type data type?
 
 
@@ -1368,7 +1413,20 @@ def import_and_upload_evaluations(url):
     filename = save_url_to_data_dir(url)
     headers = get_sheet_headers(filename)
     rows = get_data_rows(filename)
+
+    existing_evaluation_ids = [str(int(item.rsm_id)) for item in models.Evaluation.objects.filter(rsm_id__isnull=False)]
+    print(f"{len(existing_evaluation_ids)} already imported records found")  # noqa: T201
+
     unique_row_ids = get_evaluation_ids(rows, headers)
-    for unique_row_id in unique_row_ids:
+    print(f"{len(unique_row_ids)} records found in the uploaded document")  # noqa: T201
+
+    unique_and_non_duplicate_row_ids = [
+        unique_row_id for unique_row_id in unique_row_ids if unique_row_id not in existing_evaluation_ids
+    ]
+    print(
+        f"{len(unique_row_ids) - len(unique_and_non_duplicate_row_ids)} duplicates found. {len(unique_and_non_duplicate_row_ids)} new records to be imported"
+    )  # noqa: T201
+
+    for unique_row_id in unique_and_non_duplicate_row_ids:
         rows_for_id = get_evaluation_rows_for_id(unique_row_id, rows, headers)
-        transform_and_create_from_rows(rows_for_id, headers)
+        transform_and_create_from_rows(unique_row_id, rows_for_id, headers)
