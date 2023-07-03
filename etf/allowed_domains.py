@@ -46,8 +46,8 @@ DEPT_FOR_BUSINESS_AND_TRADE = frozenset(
 )
 DEPT_FOR_CULTURE_MEDIA_SPORT = frozenset(["culture.gov.uk", "dcms.gov.uk"])
 DEPT_FOR_EDUCATION = frozenset(["education.gov.uk"])
-DEPT_FOR_ENERGY_SECURITY_NET_ZERO = frozenset(["beis.gov.uk"])
-DEFRA = frozenset(["defra.gov.uk", "marinemanagement.org.uk"])
+DEPT_FOR_ENERGY_SECURITY_NET_ZERO = frozenset(["energysecurity.gov.uk"])
+DEFRA = frozenset(["defra.gov.uk"])
 DLUHC = frozenset(["levellingup.gov.uk", "communities.gov.uk"])
 DEPT_SCIENCE_INNOVATION_TECHNOLOGY = frozenset(["beis.gov.uk"])
 DEPT_TRANSPORT = frozenset(
