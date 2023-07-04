@@ -902,7 +902,7 @@ class Command(BaseCommand):
 
 def is_valid_month(string):
     try:
-        datetime.strptime(string, '%b')
+        datetime.strptime(string, "%b")
         return True
     except ValueError:
         return False
@@ -910,7 +910,7 @@ def is_valid_month(string):
 
 def is_valid_year(string):
     try:
-        datetime.strptime(string, '%Y')
+        datetime.strptime(string, "%Y")
         return True
     except ValueError:
         return False
@@ -1370,16 +1370,19 @@ def transform_and_create_from_rows(unique_row_id, rows, headers):
                 elif header_entry["resolution_method"] == "multiple_choice":
                     handle_multiple_choice_field(outcome_measure, header_entry, values_of_header_rows)
         # Handle timepoint of interest
-        value_of_months = get_values_from_rows_for_header(rows, "Time point of intesest (Month)", headers, evaluation_report_id)
+        value_of_months = get_values_from_rows_for_header(
+            rows, "Time point of intesest (Month)", headers, evaluation_report_id
+        )
         value_of_months = [value for value in value_of_months if is_valid_month(value)]
-        value_of_years = get_values_from_rows_for_header(rows, "Time point of intesest (Year)", headers, evaluation_report_id)
+        value_of_years = get_values_from_rows_for_header(
+            rows, "Time point of intesest (Year)", headers, evaluation_report_id
+        )
         value_of_years = [value for value in value_of_years if is_valid_year(value)]
         if value_of_months and value_of_years:
             most_chosen_month = max(set(value_of_months), key=value_of_months.count)
             most_chosen_year = max(set(value_of_years), key=value_of_years.count)
             outcome_measure.timepoint = datetime.strptime(f"{most_chosen_month} {most_chosen_year}", "%b %Y")
             outcome_measure.save()
-
 
     # Other measures headers
     for evaluation_report_id in evaluation_report_ids:
@@ -1439,8 +1442,6 @@ def transform_and_create_from_rows(unique_row_id, rows, headers):
     handle_derived_evaluation_fields(evaluation, rows, headers)
 
     print(f"Evaluation uploaded. Title: {evaluation.title or 'No title found'}. ID: {evaluation.id}")  # noqa: T201
-
-    # TODO: Organisations, costs, time points, figure out impact_interpretation_type data type?
 
 
 def import_and_upload_evaluations(url):
