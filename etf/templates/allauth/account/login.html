@@ -41,7 +41,7 @@
         <p>Your account is not verified. <a href="{% url 'resend-verify-email' %}?email={{resend_email|urlencode}}">Request a new verification link</a>.</p>
       {% endif %}
 
-        <p class="small">By logging in you accept our <a href="{% url 'terms-and-conditions' %}">terms and conditions</a>.</p>
+        <p class="small">By logging in you accept our <a target="_blank" rel="noopener noreferrer" href="{% url 'terms-and-conditions' %}">terms and conditions</a>.</p>
     
       </div>
 
