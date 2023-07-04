@@ -276,7 +276,7 @@ class Evaluation(TimeStampedModel, UUIDPrimaryKeyBase, NamedModel):
         return choices.ImpactMeasureInterval.mapping[self.impact_effect_measure_interval]
 
     def get_impact_interpretation_type_display_name(self):
-        return choices.ImpactEvalInterpretation.mapping[self.impact_interpretation_type]
+        return choices.ImpactInterpretationType.mapping[self.impact_interpretation_type]
 
     def get_impact_fidelity_display_name(self):
         return choices.YesNo.mapping[self.impact_fidelity]
