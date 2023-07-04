@@ -434,7 +434,7 @@ def test_upload_evaluation():
     assert outcome_measure.measure_type_other is None, outcome_measure.measure_type_other
     assert outcome_measure.description == "Average daily traffic counts", outcome_measure.description
     assert outcome_measure.collection_process == "Case study", outcome_measure.collection_process
-    assert outcome_measure.timepoint is None, outcome_measure.timepoint
+    assert outcome_measure.timepoint == "2014-02-01 00:00:00", outcome_measure.timepoint
     assert outcome_measure.minimum_difference == "Minimum difference", outcome_measure.minimum_difference
     assert outcome_measure.relevance == "Relevance of outcome", outcome_measure.relevance
 
