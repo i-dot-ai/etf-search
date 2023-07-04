@@ -1086,10 +1086,10 @@ def handle_simple_field(model, header_entry, values_of_header_rows):
             model.save()
         except (ValueError, DataError):
             print(  # noqa: T201
-                f"Could not assign value {value} to {header_entry['field_name']}. This is likely because the value is too long for the field."
+                f"Could not assign value to {header_entry['field_name']}. This is likely because the value is too long for the field."
             )
             max_length = model._meta.get_field(header_entry["field_name"]).max_length
-            setattr(model, header_entry["field_name"], value[: max_length - 1])
+            setattr(model, header_entry["field_name"], value[: max_length - 3] + "[…]")
             model.save()
         except ValidationError:
             print(  # noqa: T201
@@ -1219,10 +1219,10 @@ def handle_single_choice_field(model, header_entry, values_of_header_rows):
                 except (ValueError, DataError):
                     other_value = ". ".join(s.strip().rstrip(".") for s in values_of_header_rows) + "."
                     print(  # noqa: T201
-                        f"Could not assign value {other_value} to {header_entry['field_name']}_other. This is likely because the value is too long for the field. The value has been trimmed to fit."
+                        f"Could not assign value to {header_entry['field_name']}_other. This is likely because the value is too long for the field. The value has been trimmed to fit."
                     )
                     max_length = model._meta.get_field(f"{header_entry['field_name']}_other").max_length
-                    setattr(model, f"{header_entry['field_name']}_other", other_value[: max_length - 1])
+                    setattr(model, f"{header_entry['field_name']}_other", other_value[: max_length - 3] + "[…]")
                     model.save()
                 except ValidationError:
                     print(  # noqa: T201
@@ -1270,10 +1270,10 @@ def handle_multiple_choice_field(model, header_entry, values_of_header_rows):
                     except (ValueError, DataError):
                         other_value = ". ".join(s.strip().rstrip(".") for s in not_present_choices) + "."
                         print(  # noqa: T201
-                            f"Could not assign value {other_value} to {header_entry['field_name']}_other. This is likely because the value is too long for the field. The value has been trimmed to fit."
+                            f"Could not assign value to {header_entry['field_name']}_other. This is likely because the value is too long for the field. The value has been trimmed to fit."
                         )
                         max_length = model._meta.get_field(f"{header_entry['field_name']}_other").max_length
-                        setattr(model, f"{header_entry['field_name']}_other", other_value[: max_length - 1])
+                        setattr(model, f"{header_entry['field_name']}_other", other_value[: max_length - 3] + "[…]")
                         model.save()
                     except ValidationError:
                         print(  # noqa: T201
