@@ -563,6 +563,16 @@ evaluation_headers = {
         "resolution_method": "combine",
         "data_type": "str",
     },
+    "Impact - Summary of findings": {
+        "field_name": "impact_summary_findings",
+        "resolution_method": "combine",
+        "data_type": "str",
+    },
+    "Impact - Findings": {
+        "field_name": "impact_findings",
+        "resolution_method": "combine",
+        "data_type": "str",
+    },
     "Economic - Description of analysis": {
         "field_name": "economic_analysis_description",
         "resolution_method": "combine",
@@ -585,6 +595,16 @@ evaluation_headers = {
         "data_type": "str",
     },
     "Other - Findings": {"field_name": "other_findings", "resolution_method": "combine", "data_type": "str"},
+    "Process - Summary of findings": {
+        "field_name": "process_summary_findings",
+        "resolution_method": "combine",
+        "data_type": "str",
+    },
+    "Process - Findings": {
+        "field_name": "process_findings",
+        "resolution_method": "combine",
+        "data_type": "str",
+    },
     "Ethics committee approval": {
         "field_name": "ethics_committee_approval",
         "resolution_method": "choice",
@@ -647,15 +667,6 @@ evaluation_headers = {
         "data_type": organisation_choices,
     },
 }
-
-# Organisation
-# organisations_headers = {
-#     "Government departments": {
-#         "field_name": "organisations",
-#         "resolution_method": "multiple_choice",
-#         "data_type": organisation_choices,
-#     }
-# }
 
 # Outcome measure
 outcome_measure_headers = {

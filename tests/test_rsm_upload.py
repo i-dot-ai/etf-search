@@ -383,6 +383,11 @@ def test_upload_evaluation():
     assert evaluation.impact_point_estimate_diff is None, evaluation.impact_point_estimate_diff
     assert evaluation.impact_lower_uncertainty is None, evaluation.impact_lower_uncertainty
     assert evaluation.impact_upper_uncertainty is None, evaluation.impact_upper_uncertainty
+    assert evaluation.impact_summary_findings == "Impact summary findings.", evaluation.impact_summary_findings
+    assert evaluation.impact_findings == "Impact findings.", evaluation.impact_findings
+
+    assert evaluation.process_summary_findings == "Process summary of findings.", evaluation.process_summary_findings
+    assert evaluation.process_findings == "Process findings.", evaluation.process_findings
 
     assert evaluation.economic_summary_findings == "Economic summary of findings.", evaluation.economic_summary_findings
     assert evaluation.economic_findings == "Economic findings.", evaluation.economic_findings
