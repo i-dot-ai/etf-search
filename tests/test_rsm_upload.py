@@ -282,7 +282,6 @@ def test_upload_evaluation():
     transform_and_create_from_rows(1, data_row, headers)
     evaluation = models.Evaluation.objects.first()
     assert evaluation.title == "Evaluation title", evaluation.title
-    assert evaluation.short_title == "Short evaluation title", evaluation.short_title
     assert evaluation.evaluation_type == ["IMPACT"], evaluation.evaluation_type
     assert evaluation.organisations == ["department-for-transport"], evaluation.organisations
     assert evaluation.brief_description == "A summary of the evaluation.", evaluation.brief_description

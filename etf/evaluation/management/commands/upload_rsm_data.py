@@ -373,11 +373,6 @@ evaluation_headers = {
         "resolution_method": "single",
         "data_type": "str",
     },
-    "Short title for evaluation": {
-        "field_name": "short_title",
-        "resolution_method": "single",
-        "data_type": "str",
-    },
     "Evaluation summary": {
         "field_name": "brief_description",
         "resolution_method": "combine",
