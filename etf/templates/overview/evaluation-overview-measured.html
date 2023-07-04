@@ -13,7 +13,6 @@
       <input type="search" placeholder="Search Evaluation..." class="small" style="width:222px">
       <button type="submit" class="bttn-primary small">Search</button>
     </form>
-    <a href="#" class="bttn-tertiary small">Contact</a>
     {% if data.user_can_edit %}<a href="{{url('evaluation-overview', evaluation_id=data.evaluation.id)}}" class="bttn-tertiary small">{{macros.pencil_svg()}} Edit</a>{% endif %}
   </div>
 </div>
