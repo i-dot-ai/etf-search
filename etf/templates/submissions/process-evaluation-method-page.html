@@ -6,7 +6,7 @@
     <h1 class="highlight header3">{{title}}</h1>
       {{macros.radios_from_list("method_name", "Method", dropdown_choices.process_evaluation_method)}}
       {{macros.textarea("more_information", "More information")}}
-      {{macros.checkbox_from_list("aspects_measured", "Which of the aspects you have already entered does this intend to measure or evaluate?", list=dropdown_choices.aspect_names, other_specify=false)}}
+      {{macros.checkbox_from_list("aspects_measured", "Which of the aspects you have already entered does this intend to measure or evaluate?", list=dropdown_choices.aspect_names, other_specify=false, empty_list_warning="You have not selected an aspect. Please return to Process evaluation design: Aspects to investigate section, and make a selection.")}}
       {% include "submissions/multiple-objects-page.html" %}
   </form>
 {% endblock %}
