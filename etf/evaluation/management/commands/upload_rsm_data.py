@@ -972,7 +972,7 @@ def get_sheet_headers(filename):
 
         workbook.close()
     else:
-        print("The uploaded file must be a CSV or an xlsx file")
+        print("The uploaded file must be a CSV or an xlsx file")  # noqa: T201
         sys.exit(1)
     return headers
 
@@ -1041,7 +1041,7 @@ def get_data_rows(filename):
 
         workbook.close()
     else:
-        print("The uploaded file must be a CSV or an xlsx file")
+        print("The uploaded file must be a CSV or an xlsx file")  # noqa: T201
         sys.exit(1)
     return data
 
