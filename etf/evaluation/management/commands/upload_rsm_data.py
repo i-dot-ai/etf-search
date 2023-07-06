@@ -1,9 +1,9 @@
-import csv
 import pathlib
 from collections import defaultdict
 from datetime import datetime
 
 import httpx
+import openpyxl
 from django.conf import settings
 from django.core.exceptions import FieldDoesNotExist, ValidationError
 from django.core.management.base import BaseCommand
@@ -43,6 +43,11 @@ disallowed_row_values = (
     "Not applicablle",
     "no methodology identified within the report",
     "not applicablle",
+)
+
+exact_disallowed_row_values = (
+    "nan",
+    "na",
 )
 
 positive_row_values = (
@@ -839,7 +844,7 @@ evaluation_cost_headers = {
 processes_and_standards_headers = {
     "Name of standard or process": {
         "field_name": "name",
-        "resolution_method": "combine",
+        "resolution_method": "single",
         "data_type": "str",
     },
     "Conformity": {
@@ -948,10 +953,14 @@ def get_sheet_headers(filename):
     Returns:
         A list of headers from the given CSV
     """
-    with open(filename, "r") as file:
-        reader = csv.reader(file)
-        headers = next(reader)
-        headers = [header for header in headers if header != ""]
+    workbook = openpyxl.load_workbook(filename)
+    sheet = workbook.active
+    headers = []
+
+    for row in sheet.iter_rows(values_only=True, min_row=1, max_row=1):
+        headers = [header for header in row if header != ""]
+
+    workbook.close()
     return headers
 
 
@@ -1002,13 +1011,16 @@ def get_data_rows(filename):
     Returns:
         A list of rows that contain all the data of the given CSV
     """
+    workbook = openpyxl.load_workbook(filename)
+    sheet = workbook.active
     data = []
-    with open(filename, "r") as file:
-        reader = csv.reader(file)
-        _ = next(reader)
-        for row in reader:
-            data.append(row)
-        return data
+
+    for row in sheet.iter_rows(values_only=True, min_row=2):
+        row_with_empty_strings = [str(cell) if cell is not None else "" for cell in row]
+        data.append(row_with_empty_strings)
+
+    workbook.close()
+    return data
 
 
 def get_evaluation_rows_for_id(unique_id, rows, headers):
@@ -1055,6 +1067,10 @@ def get_values_from_rows_for_header(rows, header, headers, report_id=None):
                 break
         if not contains_disallowed:
             allowed_values.append(value)
+
+    allowed_values = [
+        allowed_value for allowed_value in allowed_values if allowed_value not in exact_disallowed_row_values
+    ]
     return list(set(allowed_values))
 
 
@@ -1441,7 +1457,7 @@ def transform_and_create_from_rows(unique_row_id, rows, headers):
     # Derived evaluation headers
     handle_derived_evaluation_fields(evaluation, rows, headers)
 
-    print(f"Evaluation uploaded. Title: {evaluation.title or 'No title found'}. ID: {evaluation.id}")  # noqa: T201
+    print(f"Evaluation uploaded. ID: {evaluation.id}")  # noqa: T201
 
 
 def import_and_upload_evaluations(url):
