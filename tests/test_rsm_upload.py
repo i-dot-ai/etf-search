@@ -453,7 +453,7 @@ def test_upload_evaluation():
 
     assert evaluation.process_standards.all().count() == 1
     process_standard = evaluation.process_standards.first()
-    assert process_standard.name == "Name of standard or process.", process_standard.name
+    assert process_standard.name == "Name of standard or process", process_standard.name
     assert process_standard.conformity == "FULL", process_standard.conformity
     assert process_standard.description == "Process and standards description.", process_standard.description
 
