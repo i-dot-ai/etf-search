@@ -1,4 +1,7 @@
+import csv
+import os
 import pathlib
+import sys
 from collections import defaultdict
 from datetime import datetime
 
@@ -953,14 +956,24 @@ def get_sheet_headers(filename):
     Returns:
         A list of headers from the given CSV
     """
-    workbook = openpyxl.load_workbook(filename)
-    sheet = workbook.active
-    headers = []
+    file_extension = os.path.splitext(filename)[1]
+    if file_extension.endswith(".csv"):
+        with open(filename, "r") as file:
+            reader = csv.reader(file)
+            headers = next(reader)
+            headers = [header for header in headers if header != ""]
+    elif file_extension.endswith(".xlsx"):
+        workbook = openpyxl.load_workbook(filename)
+        sheet = workbook.active
+        headers = []
 
-    for row in sheet.iter_rows(values_only=True, min_row=1, max_row=1):
-        headers = [header for header in row if header != ""]
+        for row in sheet.iter_rows(values_only=True, min_row=1, max_row=1):
+            headers = [header for header in row if header != ""]
 
-    workbook.close()
+        workbook.close()
+    else:
+        print("The uploaded file must be a CSV or an xlsx file")
+        sys.exit(1)
     return headers
 
 
@@ -1011,15 +1024,25 @@ def get_data_rows(filename):
     Returns:
         A list of rows that contain all the data of the given CSV
     """
-    workbook = openpyxl.load_workbook(filename)
-    sheet = workbook.active
     data = []
+    file_extension = os.path.splitext(filename)[1]
+    if file_extension.endswith(".csv"):
+        with open(filename, "r") as file:
+            reader = csv.reader(file)
+            _ = next(reader)
+            for row in reader:
+                data.append(row)
+    elif file_extension.endswith(".xlsx"):
+        workbook = openpyxl.load_workbook(filename)
+        sheet = workbook.active
+        for row in sheet.iter_rows(values_only=True, min_row=2):
+            row_with_empty_strings = [str(cell) if cell is not None else "" for cell in row]
+            data.append(row_with_empty_strings)
 
-    for row in sheet.iter_rows(values_only=True, min_row=2):
-        row_with_empty_strings = [str(cell) if cell is not None else "" for cell in row]
-        data.append(row_with_empty_strings)
-
-    workbook.close()
+        workbook.close()
+    else:
+        print("The uploaded file must be a CSV or an xlsx file")
+        sys.exit(1)
     return data
 
 
