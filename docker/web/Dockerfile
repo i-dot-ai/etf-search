@@ -7,7 +7,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 COPY ./web /app/web
 
 WORKDIR /app/web
-RUN pwd 
+
 RUN npm ci
 RUN npm run build
 
