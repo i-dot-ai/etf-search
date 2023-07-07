@@ -4,6 +4,7 @@ import inspect
 import types
 
 import marshmallow
+from django.contrib.auth.decorators import login_required
 from django.http import Http404
 
 from etf.settings import ALLOWED_CIVIL_SERVICE_DOMAINS
@@ -234,6 +235,7 @@ def restrict_to_permitted_evaluations(user, evaluations_qs):
 
 
 def check_evaluation_view_permission(func):
+    @login_required
     def wrapper(request, *args, **kwargs):
         evaluation_id = kwargs["evaluation_id"]
         evaluation = models.Evaluation.objects.get(pk=evaluation_id)
