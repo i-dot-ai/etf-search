@@ -4,10 +4,10 @@ ENV TZ=UTC
 
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-COPY . /app
+COPY ./web /app/web
 
 WORKDIR /app/web
-RUN pwd 
+
 RUN npm ci
 RUN npm run build
 
@@ -42,11 +42,10 @@ RUN chmod +x /start.sh
 # Set the working directory
 WORKDIR /app
 
-# Copy the app directory and list.txt from build-stage
-COPY --from=build-stage /app .
+COPY . /app
 
-# Create a new directory to store the output files
-RUN mkdir -p /output && cp -R /app/static/dist/* /output
+# Copy the app directory and list.txt from build-stage
+COPY --from=build-stage /app/web /app/web
 
 RUN \
     DJANGO_SETTINGS_MODULE=etf.settings_base \
