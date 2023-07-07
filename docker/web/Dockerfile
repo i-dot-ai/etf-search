@@ -47,9 +47,6 @@ COPY . /app
 # Copy the app directory and list.txt from build-stage
 COPY --from=build-stage /app/web /app/web
 
-# Create a new directory to store the output files
-RUN mkdir -p /output && cp -R /app/static/dist/* /output
-
 RUN \
     DJANGO_SETTINGS_MODULE=etf.settings_base \
     DJANGO_SECRET_KEY="temp" \
