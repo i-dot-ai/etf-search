@@ -4,8 +4,8 @@ import inspect
 import types
 
 import marshmallow
-from django.http import Http404
 from django.contrib.auth.decorators import login_required
+from django.http import Http404
 
 from etf.settings import ALLOWED_CIVIL_SERVICE_DOMAINS
 
