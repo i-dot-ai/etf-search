@@ -177,3 +177,17 @@ def test_remove_contributor(client):
     url = reverse("evaluation-contributor-remove", args=(evaluation.id, "mrs.tiggywinkle@example.com"))
     response = client.get(url)
     assert response.status_code == 405, response.status_code
+
+
+@with_setup(utils.create_fake_evaluations, utils.remove_fake_evaluations)
+@utils.with_client
+def test_anon_evaluation_overview(client):
+    evaluation_draft = models.Evaluation.objects.filter(title="Draft evaluation 1").first()
+    evaluation_cs = models.Evaluation.objects.filter(title="Civil Service evaluation 1").first()
+    url_names = ("evaluation-summary-overview", "evaluation-summary-measured", "evaluation-summary-design", "evaluation-summary-analysis", "evaluation-summary-findings", "evaluation-summary-cost")
+    for evaluation in [evaluation_draft, evaluation_cs]:
+        for url_name in url_names:
+            url = reverse(url_name, args=(evaluation.id,))
+        response = client.get(url)
+        assert response.status_code == 302
+        assert response.headers['location'] == f"/accounts/login/?next=/evaluation-summary/{evaluation.id}/overview/{url_name.split('-')[-1]}/"
