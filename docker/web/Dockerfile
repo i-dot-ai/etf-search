@@ -4,7 +4,7 @@ ENV TZ=UTC
 
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-COPY . /app
+COPY ./web /app/web
 
 WORKDIR /app/web
 RUN pwd 
@@ -42,8 +42,10 @@ RUN chmod +x /start.sh
 # Set the working directory
 WORKDIR /app
 
+COPY . /app
+
 # Copy the app directory and list.txt from build-stage
-COPY --from=build-stage /app .
+COPY --from=build-stage /app/web /app/web
 
 # Create a new directory to store the output files
 RUN mkdir -p /output && cp -R /app/static/dist/* /output
