@@ -1,20 +1,4 @@
-FROM node:16 as build-stage
-
-ENV TZ=UTC
-
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-
-COPY ./web /app/web
-
-WORKDIR /app/web
-
-RUN npm ci
-RUN npm run build
-
-################
-
 FROM python:3.8-buster
-
 
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -43,8 +27,6 @@ RUN chmod +x /start.sh
 WORKDIR /app
 
 COPY . /app
-
-COPY --from=build-stage /app/web/build /app/build
 
 RUN \
     DJANGO_SETTINGS_MODULE=etf.settings_base \
