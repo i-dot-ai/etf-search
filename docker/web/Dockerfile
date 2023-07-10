@@ -44,8 +44,7 @@ WORKDIR /app
 
 COPY . /app
 
-# Copy the app directory and list.txt from build-stage
-COPY --from=build-stage /app/web /app/web
+COPY --from=build-stage /app/web/build /app/build
 
 RUN \
     DJANGO_SETTINGS_MODULE=etf.settings_base \
