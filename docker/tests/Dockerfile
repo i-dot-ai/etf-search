@@ -26,6 +26,8 @@ COPY . /app
 
 WORKDIR /app/
 
+RUN mkdir build
+
 RUN \
     DJANGO_SETTINGS_MODULE=etf.settings_base \
     DJANGO_SECRET_KEY="temp" \
