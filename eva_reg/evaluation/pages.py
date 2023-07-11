@@ -1,6 +1,6 @@
 import itertools
 
-from etf.evaluation import choices, utils
+from eva_reg.evaluation import choices, utils
 
 
 class EvaluationPageStatus(utils.Choices):

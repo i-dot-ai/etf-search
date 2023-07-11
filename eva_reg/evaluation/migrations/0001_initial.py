@@ -8,7 +8,7 @@ import django_use_email_as_username.models
 from django.conf import settings
 from django.db import migrations, models
 
-import etf.evaluation.pages
+import eva_reg.evaluation.pages
 
 
 class Migration(migrations.Migration):
@@ -105,7 +105,7 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 ("doi", models.CharField(blank=True, max_length=64, null=True)),
-                ("page_statuses", models.JSONField(default=etf.evaluation.pages.get_default_page_statuses)),
+                ("page_statuses", models.JSONField(default=eva_reg.evaluation.pages.get_default_page_statuses)),
                 ("issue_description", models.TextField(blank=True, null=True)),
                 ("those_experiencing_issue", models.TextField(blank=True, null=True)),
                 ("why_improvements_matter", models.TextField(blank=True, null=True)),

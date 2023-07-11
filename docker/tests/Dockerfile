@@ -29,7 +29,7 @@ WORKDIR /app/
 RUN mkdir build
 
 RUN \
-    DJANGO_SETTINGS_MODULE=etf.settings_base \
+    DJANGO_SETTINGS_MODULE=eva_reg.settings_base \
     DJANGO_SECRET_KEY="temp" \
     python manage.py collectstatic --no-input
 

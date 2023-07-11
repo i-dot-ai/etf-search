@@ -55,7 +55,7 @@ if DEBUG:
 # Application definition
 
 INSTALLED_APPS = [
-    "etf.evaluation",
+    "eva_reg.evaluation",
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
@@ -79,7 +79,7 @@ if DEBUG:
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
-    "etf.evaluation.session_middleware.MaxAgeSessionMiddleware",
+    "eva_reg.evaluation.session_middleware.MaxAgeSessionMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -90,7 +90,7 @@ MIDDLEWARE = [
 ]
 
 if BASIC_AUTH:
-    MIDDLEWARE = ["etf.auth.basic_auth_middleware"] + MIDDLEWARE
+    MIDDLEWARE = ["eva_reg.auth.basic_auth_middleware"] + MIDDLEWARE
 
 if VCAP_APPLICATION.get("space_name", "unknown") not in ["tests", "local"]:
     SESSION_COOKIE_SECURE = True
@@ -109,22 +109,22 @@ CORS_MIDDLEWARE = [
 if DEBUG:
     MIDDLEWARE = MIDDLEWARE + CORS_MIDDLEWARE
 
-ROOT_URLCONF = "etf.urls"
+ROOT_URLCONF = "eva_reg.urls"
 
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.jinja2.Jinja2",
         "DIRS": [
-            BASE_DIR / "etf" / "templates",
+            BASE_DIR / "eva_reg" / "templates",
         ],
         "OPTIONS": {
-            "environment": "etf.jinja2.environment",
+            "environment": "eva_reg.jinja2.environment",
         },
     },
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [
-            BASE_DIR / "etf" / "templates" / "allauth",
+            BASE_DIR / "eva_reg" / "templates" / "allauth",
         ],
         "APP_DIRS": True,
         "OPTIONS": {
@@ -133,13 +133,13 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                "etf.evaluation.context_processors.space_name",
+                "eva_reg.evaluation.context_processors.space_name",
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = "etf.wsgi.application"
+WSGI_APPLICATION = "eva_reg.wsgi.application"
 
 DATABASES = {
     "default": {

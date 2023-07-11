@@ -7,7 +7,7 @@ from django.templatetags.static import static
 from django.urls import reverse
 from markdown_it import MarkdownIt
 
-from etf.evaluation import fields, models, pages
+from eva_reg.evaluation import fields, models, pages
 
 markdown_converter = MarkdownIt()
 

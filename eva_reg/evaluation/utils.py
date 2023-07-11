@@ -7,7 +7,7 @@ import marshmallow
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
 
-from etf.settings import ALLOWED_CIVIL_SERVICE_DOMAINS
+from eva_reg.settings import ALLOWED_CIVIL_SERVICE_DOMAINS
 
 from . import choices, models
 

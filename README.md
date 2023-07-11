@@ -46,7 +46,7 @@ Data to initially populate the registry has been provided in a specified Excel f
 
 Run this locally to find errors before running in the development/testing/live environments.
 
-Save the data file in the folder `etf/data` then run:
+Save the data file in the folder `eva_reg/data` then run:
 
 ```
 docker-compose run web python manage.py upload_rsm_data --filename <name-of-excel-file.xlsx>

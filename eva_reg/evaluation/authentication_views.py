@@ -11,10 +11,10 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 
-from etf import settings
-from etf.evaluation import email_handler, models, restrict_email
-from etf.evaluation.email_handler import send_account_already_exists_email
-from etf.evaluation.views import MethodDispatcher
+from eva_reg import settings
+from eva_reg.evaluation import email_handler, models, restrict_email
+from eva_reg.evaluation.email_handler import send_account_already_exists_email
+from eva_reg.evaluation.views import MethodDispatcher
 
 
 @require_http_methods(["GET", "POST"])

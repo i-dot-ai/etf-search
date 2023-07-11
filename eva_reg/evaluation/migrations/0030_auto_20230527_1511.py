@@ -5,7 +5,7 @@ import uuid
 import django.db.models.deletion
 from django.db import migrations, models
 
-import etf.evaluation.models
+import eva_reg.evaluation.models
 
 
 class Migration(migrations.Migration):
@@ -52,7 +52,7 @@ class Migration(migrations.Migration):
             options={
                 "abstract": False,
             },
-            bases=(etf.evaluation.models.NamedModel, models.Model),
+            bases=(eva_reg.evaluation.models.NamedModel, models.Model),
         ),
         migrations.CreateModel(
             name="ProcessEvaluationAspect",
@@ -76,6 +76,6 @@ class Migration(migrations.Migration):
             options={
                 "unique_together": {("evaluation", "aspect_name")},
             },
-            bases=(etf.evaluation.models.NamedModel, models.Model),
+            bases=(eva_reg.evaluation.models.NamedModel, models.Model),
         ),
     ]

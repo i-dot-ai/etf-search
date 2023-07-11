@@ -12,7 +12,7 @@ from django.core.exceptions import FieldDoesNotExist, ValidationError
 from django.core.management.base import BaseCommand
 from django.db import DataError
 
-from etf.evaluation import choices, models
+from eva_reg.evaluation import choices, models
 
 DATA_DIR = settings.BASE_DIR / "temp-data"
 CHUNK_SIZE = 16 * 1024

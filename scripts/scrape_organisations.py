@@ -5,7 +5,7 @@ import httpx
 
 __here__ = pathlib.Path(__file__).parent
 DATA_DIR = __here__ / ".." / "data"
-APP_DIR = __here__ / ".." / "etf" / "evaluation"
+APP_DIR = __here__ / ".." / "eva_reg" / "evaluation"
 
 base_url = "https://www.gov.uk/api/organisations"
 

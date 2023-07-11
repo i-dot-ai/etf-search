@@ -1,4 +1,4 @@
-from etf.jinja2 import static
+from eva_reg.jinja2 import static
 
 from . import utils
 

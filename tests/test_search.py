@@ -1,4 +1,4 @@
-from etf.evaluation import interface, models
+from eva_reg.evaluation import interface, models
 
 from . import utils
 

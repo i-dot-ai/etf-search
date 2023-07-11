@@ -7,9 +7,9 @@ import pathlib
 
 import pandas as pd
 
-from etf.evaluation import choices, enums, models
+from eva_reg.evaluation import choices, enums, models
 
-DATA_DIR = pathlib.Path("etf", "data")
+DATA_DIR = pathlib.Path("eva_reg", "data")
 INFO_NOT_IDENTIFIED = "Information not identified within the report"
 
 EVALUATION_STANDARD_FIELDS_LOOKUP = {

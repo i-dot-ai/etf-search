@@ -12,7 +12,7 @@ from django.views.decorators.http import require_http_methods
 from marshmallow import EXCLUDE
 from marshmallow.exceptions import ValidationError
 
-from etf.evaluation import interface, schemas
+from eva_reg.evaluation import interface, schemas
 
 from . import choices, enums, models
 from .email_handler import send_contributor_added_email, send_invite_email

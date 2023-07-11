@@ -1,6 +1,6 @@
 from nose.tools import with_setup
 
-from etf.evaluation import choices, models
+from eva_reg.evaluation import choices, models
 
 
 def test_name_field():

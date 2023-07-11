@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 
-from etf.evaluation import fakers
+from eva_reg.evaluation import fakers
 
 
 class Command(BaseCommand):

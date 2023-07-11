@@ -5,10 +5,10 @@ import pathlib
 import httpx
 import testino
 
-import etf.wsgi
-from etf import settings
-from etf.evaluation import choices
-from etf.evaluation.models import Evaluation, User
+import eva_reg.wsgi
+from eva_reg import settings
+from eva_reg.evaluation import choices
+from eva_reg.evaluation.models import Evaluation, User
 
 TEST_SERVER_URL = "http://etf-testserver:8010/"
 
@@ -16,7 +16,7 @@ TEST_SERVER_URL = "http://etf-testserver:8010/"
 def with_client(func):
     @functools.wraps(func)
     def _inner(*args, **kwargs):
-        with httpx.Client(app=etf.wsgi.application, base_url=TEST_SERVER_URL) as client:
+        with httpx.Client(app=eva_reg.wsgi.application, base_url=TEST_SERVER_URL) as client:
             return func(client, *args, **kwargs)
 
     return _inner
@@ -29,7 +29,7 @@ def with_authenticated_client(func):
         user.set_password("P455W0rd")
         user.verified = True
         user.save()
-        with httpx.Client(app=etf.wsgi.application, base_url=TEST_SERVER_URL, follow_redirects=True) as client:
+        with httpx.Client(app=eva_reg.wsgi.application, base_url=TEST_SERVER_URL, follow_redirects=True) as client:
             response = client.get("/accounts/login/")
             csrf = response.cookies["csrftoken"]
             data = {"login": user.email, "password": "P455W0rd"}
@@ -48,7 +48,7 @@ def with_authenticated_external_client(func):
         user.verified = True
         user.is_external_user = True
         user.save()
-        with httpx.Client(app=etf.wsgi.application, base_url=TEST_SERVER_URL, follow_redirects=True) as client:
+        with httpx.Client(app=eva_reg.wsgi.application, base_url=TEST_SERVER_URL, follow_redirects=True) as client:
             response = client.get("/accounts/login/")
             csrf = response.cookies["csrftoken"]
             data = {"login": user.email, "password": "P455W0rd"}
@@ -60,7 +60,7 @@ def with_authenticated_external_client(func):
 
 
 def make_testino_client():
-    client = testino.WSGIAgent(etf.wsgi.application, TEST_SERVER_URL)
+    client = testino.WSGIAgent(eva_reg.wsgi.application, TEST_SERVER_URL)
     return client
 
 
