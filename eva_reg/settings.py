@@ -39,7 +39,7 @@ ALLOWED_HOSTS = [
     "etf.london.cloudapps.digital",
     "localhost",
     "127.0.0.1",
-    "etf-testserver",
+    "eva-reg-testserver",
 ]
 
 HOST_MAP = {

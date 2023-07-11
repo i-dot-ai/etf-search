@@ -33,21 +33,21 @@ services:
     volumes:
       - ./:/app/:z
 
-  tests-etf:
+  tests-eva-reg:
     build:
       context: .
       dockerfile: ./docker/tests/Dockerfile
-    image: tests_etf
+    image: tests_eva_reg
     env_file:
       - ./envs/tests
     profiles:
       - testing
     depends_on:
-      - etf-test-db
+      - eva-reg-test-db
 
-  etf-test-db:
+  eva-reg-test-db:
     image: postgres:13
-    container_name: etf_test_postgres
+    container_name: eva_reg_test_postgres
     env_file:
       - ./envs/tests
     expose:
@@ -57,7 +57,7 @@ services:
     build:
       context: .
       dockerfile: ./docker/build-static/Dockerfile
-    image: build-static-etf
+    image: build-static-eva-reg
     env_file:
       - ./envs/web
     volumes:

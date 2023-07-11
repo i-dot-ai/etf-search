@@ -10,7 +10,7 @@ from eva_reg import settings
 from eva_reg.evaluation import choices
 from eva_reg.evaluation.models import Evaluation, User
 
-TEST_SERVER_URL = "http://etf-testserver:8010/"
+TEST_SERVER_URL = "http://eva-reg-testserver:8010/"
 
 
 def with_client(func):
