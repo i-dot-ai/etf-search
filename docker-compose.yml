@@ -52,3 +52,15 @@ services:
       - ./envs/tests
     expose:
       - "5432"
+
+  build-static:
+    build:
+      context: .
+      dockerfile: ./docker/build-static/Dockerfile
+    image: build-static-etf
+    env_file:
+      - ./envs/web
+    volumes:
+      - ./:/app/:z
+    profiles:
+      - build-static

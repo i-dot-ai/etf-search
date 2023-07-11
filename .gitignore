@@ -7,7 +7,3 @@ db.sqlite3
 .DS_Store
 /etf/data/*
 /temp-data
-
-
-static/dist/**
-!static/dist/.gitkeep

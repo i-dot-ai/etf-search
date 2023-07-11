@@ -46,3 +46,7 @@ test:
 	docker-compose down
 	docker-compose build tests-etf etf-test-db && docker-compose run --rm tests-etf
 	docker-compose down
+
+.PHONY: build-static
+build-static:
+	docker-compose build build-static && docker-compose run --rm build-static
