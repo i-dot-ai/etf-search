@@ -9,7 +9,7 @@ services:
       context: .
       dockerfile: ./docker/web/Dockerfile
     depends_on:
-      - db
+      - eva-reg-db
     env_file:
       - ./envs/web
     volumes:
@@ -17,7 +17,7 @@ services:
     ports:
       - "8010:8010"
 
-  db:
+  eva-reg-db:
     image: postgres:13
     volumes:
       - local_postgres_data:/var/lib/postgresql/data:Z
