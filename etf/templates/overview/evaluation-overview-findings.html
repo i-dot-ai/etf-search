@@ -79,7 +79,7 @@
               {{ data.evaluation.impact_interpretation and data.evaluation.get_impact_interpretation_display_name() or "Not answered" }}
             </td>
           </tr>
-          {% if data.evaluation.impact_interpretation == "OTHER" and data.evaluation.impact_interpretation_other | length > 0 %}
+          {% if data.evaluation.impact_interpretation == "OTHER" and data.evaluation.impact_interpretation_other %}
             <tr>
             <th>Interpretation (Other)</th>
             <td>{{data.evaluation.impact_interpretation_other}}</td>

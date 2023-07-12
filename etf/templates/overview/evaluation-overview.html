@@ -66,7 +66,7 @@
           <tr>
             <th>Organisation(s)</th>
             <td>
-              {% if data.organisations | length > 0 %}
+              {% if data.organisations %}
                 {% for organisation in data.organisations %}
                   <div class="chip orange">{{organisation}}</div>
                 {% endfor %}
@@ -78,7 +78,7 @@
           <tr>
             <th>Evaluation types</th>
             <td>
-            {% if data.evaluation_types | length > 0 %}
+            {% if data.evaluation_types %}
               {% for evaluation_type in data.evaluation_types %}
                 <p>{{evaluation_type}}</p>
               {% endfor %}
@@ -91,7 +91,7 @@
           <tr>
               <th>Evaluation type (Other)</th>
               <td>
-              {% if data.evaluation.evaluation_type_other | length > 0 %}
+              {% if data.evaluation.evaluation_type_other %}
                   <p>{{data.evaluation.evaluation_type_other}}</p>
               {% endif %}
             </td>
@@ -114,7 +114,7 @@
             <th>Event Name</th>
             <td>{{date.get_name()}}</td>
           </tr>
-          {% if date.event_date_name == "OTHER" and date.event_date_name_other | length > 0 %}
+          {% if date.event_date_name == "OTHER" and date.event_date_name_other %}
             <tr>
             <th>Event Name (Other)</th>
             <td>{{date.event_date_name_other}}</td>

@@ -1014,6 +1014,7 @@ def evaluation_process_design_aspects_view(request, evaluation_id):
             "next_url": next_url,
             "prev_url": prev_url,
             "title": title,
+            "evaluation_title": evaluation["title"],
             "page_order": pages.get_page_name_and_order(page_options),
             "evaluation_id": evaluation_id,
             "page_statuses": page_statuses,
