@@ -2,7 +2,7 @@ import functools
 
 from nose.tools import with_setup
 
-from etf.evaluation import choices, enums, models
+from eva_reg.evaluation import choices, enums, models
 
 from . import utils
 

@@ -1,8 +1,8 @@
 from django.core.exceptions import ValidationError
 from nose import with_setup
 
-from etf import settings as etf_settings
-from etf.evaluation import models, restrict_email
+from eva_reg import settings as eva_reg_settings
+from eva_reg.evaluation import models, restrict_email
 
 from . import utils
 from .utils import _get_latest_email_text
@@ -97,8 +97,8 @@ def test_user_already_registered():
 
 
 @with_setup(
-    lambda: setattr(etf_settings, "SEND_VERIFICATION_EMAIL", True),
-    lambda: setattr(etf_settings, "SEND_VERIFICATION_EMAIL", False),
+    lambda: setattr(eva_reg_settings, "SEND_VERIFICATION_EMAIL", True),
+    lambda: setattr(eva_reg_settings, "SEND_VERIFICATION_EMAIL", False),
 )
 def test_verify_email():
     client = utils.make_testino_client()

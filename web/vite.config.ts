@@ -13,7 +13,7 @@ export default defineConfig({
   },
   plugins: [
     svgLoader({ defaultImport: 'raw' }),
-    liveReload('../etf/templates/**/*.html', { alwaysReload: true })
+    liveReload('../eva_reg/templates/**/*.html', { alwaysReload: true })
   ],
   css: {
     postcss: {

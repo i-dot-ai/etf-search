@@ -1,6 +1,6 @@
 from nose import with_setup
 
-from etf.evaluation import choices, fields, interface, models
+from eva_reg.evaluation import choices, fields, interface, models
 
 from . import utils
 

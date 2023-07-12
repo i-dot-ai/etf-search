@@ -1,4 +1,4 @@
-from etf.evaluation import choices
+from eva_reg.evaluation import choices
 
 
 def test_get_db_values():

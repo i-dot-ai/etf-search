@@ -1,5 +1,5 @@
-from etf.evaluation import models
-from etf.evaluation.management.commands.upload_rsm_data import (
+from eva_reg.evaluation import models
+from eva_reg.evaluation.management.commands.upload_rsm_data import (
     transform_and_create_from_rows,
 )
 

@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
-from etf.evaluation import choices, enums, models
+from eva_reg.evaluation import choices, enums, models
 
 from .utils import check_evaluation_view_permission
 

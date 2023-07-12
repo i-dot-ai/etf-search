@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.shortcuts import redirect
 from django.urls import include, path
 
-from etf.evaluation import (
+from eva_reg.evaluation import (
     authentication_views,
     download_views,
     overview_views,
@@ -373,4 +373,4 @@ debug_urlpatterns = [
 if settings.DEBUG:
     urlpatterns = urlpatterns + debug_urlpatterns
 
-handler404 = "etf.evaluation.views.view_404"
+handler404 = "eva_reg.evaluation.views.view_404"

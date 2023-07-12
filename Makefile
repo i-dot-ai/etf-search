@@ -44,7 +44,7 @@ check-migrations:
 .PHONY: test
 test:
 	docker-compose down
-	docker-compose build tests-etf etf-test-db && docker-compose run --rm tests-etf
+	docker-compose build tests-eva-reg eva-reg-test-db && docker-compose run --rm tests-eva-reg
 	docker-compose down
 
 .PHONY: build-static

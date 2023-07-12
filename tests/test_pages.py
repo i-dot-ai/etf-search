@@ -1,4 +1,4 @@
-from etf.evaluation import pages
+from eva_reg.evaluation import pages
 
 
 def test_get_prev_next_page_name_first():

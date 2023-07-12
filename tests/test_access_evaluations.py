@@ -8,8 +8,8 @@ URLs get tested. You will have to be explicit about URLs that don't need to be t
 from django.urls import reverse
 from nose import with_setup
 
-from etf import urls
-from etf.evaluation import models
+from eva_reg import urls
+from eva_reg.evaluation import models
 
 from . import utils
 

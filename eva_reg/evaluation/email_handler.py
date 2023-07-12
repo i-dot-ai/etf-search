@@ -7,7 +7,7 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 
-from etf.evaluation import models
+from eva_reg.evaluation import models
 
 
 def _strip_microseconds(dt):

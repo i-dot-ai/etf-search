@@ -4,8 +4,8 @@ import itertools
 import marshmallow
 from nose.tools import assert_raises, with_setup
 
-from etf.evaluation import models, utils
-from etf.evaluation.utils import restrict_to_permitted_evaluations
+from eva_reg.evaluation import models, utils
+from eva_reg.evaluation.utils import restrict_to_permitted_evaluations
 
 from .utils import create_fake_evaluations, remove_fake_evaluations
 
