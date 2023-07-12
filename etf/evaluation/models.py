@@ -723,11 +723,13 @@ class ProcessEvaluationAspect(TimeStampedModel, UUIDPrimaryKeyBase, NamedModel, 
         return self.aspect_name
 
     def get_search_text(self):
+        aspect_name = [value[1] for value in choices.ProcessEvaluationAspects.choices if value[0] == self.aspect_name]
+
         searchable_fields = [
-            str(choices.ProcessEvaluationAspects.mapping[self.aspect_name]),
             str(self.aspect_name_other),
             str(self.summary_findings),
             str(self.findings),
+            "|".join(aspect_name),
         ]
         searchable_fields = [field for field in searchable_fields if field not in (None, "", " ", "None")]
         return "|".join(searchable_fields)
