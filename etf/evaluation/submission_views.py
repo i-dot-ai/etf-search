@@ -924,7 +924,7 @@ def process_evaluation_method_page_view(request, evaluation_id, process_evaluati
         specified_other=other_specify,
     )
     dropdown_choices = {
-        "aspect_names": list(aspect_name_choices),
+        "aspect_names": tuple(aspect_name_choices),
         "process_evaluation_method": choices.ProcessEvaluationMethods.choices,
     }
     url_names = get_related_object_page_url_names("process-evaluation-methods", page_options)
