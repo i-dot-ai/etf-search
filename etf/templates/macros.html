@@ -103,26 +103,32 @@
 </div>
 {%- endmacro %}
 
-{% macro checkbox_from_list(name, label, list, empty_option=DEFAULT, other_specify=true) -%}
+{% macro checkbox_from_list(name, label, list, empty_option=DEFAULT, other_specify=true, empty_list_warning="You have not selected an option required to populate this field.") -%}
   <fieldset>
     <legend>
       {{label}}
     </legend>
     {{input_description(name)}}
+    {% if not list %}
+      <div>
+      <p>{{empty_list_warning}}</p>
+      </div>
+    {% else %}
     {% for item in list %}
-    <div class="form-group">
-      <label class="checkbox">
-        <input type="checkbox" {{is_in(data, name, item[0]) and checked}} name="{{name}}" value="{{item[0]}}">
-        <span class="checkmark"></span>
-        <span>{{item[1]}}</span>
-      </label>
-      {% endfor %}
+      <div class="form-group">
+        <label class="checkbox">
+          <input type="checkbox" {{is_in(data, name, item[0]) and checked}} name="{{name}}" value="{{item[0]}}">
+          <span class="checkmark"></span>
+          <span>{{item[1]}}</span>
+        </label>
+    {% endfor %}
       {% if other_specify %}
         <div class="form-group controller-subfield" id="conditional-dyt6y3i">
           {{input(name+"_other", "If "+label+" is 'Other', please provide more detail")}}
         </div>
       {% endif %}
-    </div>
+      </div>
+    {% endif %}
   </fieldset>
   {{macros.guidance(name=name, label="Additional guidance")}}
 {%- endmacro %}
