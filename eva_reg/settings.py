@@ -1,5 +1,6 @@
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
+from sentry_sdk.scrubber import EventScrubber
 
 from . import allowed_domains
 from .settings_base import (
@@ -185,7 +186,8 @@ sentry_sdk.init(
         DjangoIntegration(),
     ],
     environment=SENTRY_ENVIRONMENT,
-    send_default_pii=True,
+    event_scrubber=EventScrubber(),  # this is set by default
+    send_default_pii=False,
     traces_sample_rate=0.0,
 )
 
