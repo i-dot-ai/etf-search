@@ -231,7 +231,8 @@ studied_population_help_text = defaultdict(
     {
         "studied_population": "Description of the population studied including settings and locations where the data are planned to be collected.",
         "eligibility_criteria": "A comprehensive description of the eligibility criteria used to select the study participants.",
-        "sample_size": "The overall sample size of the evaluation.",
+        "sample_size": "The overall sample size of the evaluation. (Enter a number.)",
+        "sample_size_units": "The units that the sample size is counted in.",
         "sample_size_details": "Details of the sample size and how the sample size was determined.",
     },
 )
@@ -713,7 +714,9 @@ studied_population_guidance_text = defaultdict(
             "This will typically be the total number of people included in the evaluation. Provide any details below."
         ],
         "sample_size_units": [
-            "This will normally be 'people' as each unit within an evaluation is a person. It can, however, be another unit if the population is of some other type, eg if the results are per-school or similar."
+            "This will normally be 'people' as each unit within an evaluation is a person. It can, however, be another unit if the population is of some other type.",
+            "For example, if the results are per-school, the units might be 'schools'.",
+            "For area-based evaluations, where aggregate outcomes for some areas are compared against outcomes for some other areas, the units might be 'areas', or some more specific version such as 'local authority areas', 'wards', or 'counties'.",
         ],
         "sample_size_details": [
             "For an evaluation that is comparing two or more interventions, this should include the number per 'arm' of the study (the number allocated to each intervention).",

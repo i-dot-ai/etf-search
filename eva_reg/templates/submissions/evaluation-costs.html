@@ -5,17 +5,21 @@
   <form method="POST" id="create-evaluation">{{csrf_input}}
       <h1 class="highlight header3">{{title}}</h1>
       <div class="content caption">
-        <p>Enter the costs associated with the evaluation, broken down however makes sense for your project.</p>
+        <p>Enter the costs associated with the evaluation. You can enter enter the total cost of the evaluation or break the overall cost down into parts if you want to.</p>
 
         <div is="hint-box" aria-label="Additional guidance">
           <div class="content">
             
-            <p>One option is to break the costs down by <b>time period</b>, such as by years or by quarters. In this case the cost items could simply be 'Evaluation costs in year 1', 'Evaluation costs in year 2', etc.</p>
+            <p>If you just want to record the <b>total cost</b> of the evaluation, enter 'Whole evaluation' as the item and then the total cost as the associated cost.</p>
+            
+            <p>If you want to record information about parts of the overall cost, you can break it down however makes sense for your project.</p>
+
+            <p>One option is to break the costs down by <b>time period</b>, such as by years or by quarters. In this case, the cost items could simply be 'Evaluation costs in year 1', 'Evaluation costs in year 2', etc.</p>
 
             <p>Another option is to break the costs down by <b>types of activity</b>, for example adding cost items for 'Evaluation fieldwork', 'Evaluation analysis', etc.</p>
 
-            <p>If you just want to record the <b>total cost</b> of the evaluation, enter 'Whole evaluation' as the item and then the total cost as the associated cost.</p>
-            
+            <p>If you do break the costs down, feel free to include an entry for 'Other costs' to include anything not covered in your specific costed items.</p>
+
           </div>
         </div>
 
